@@ -1,0 +1,117 @@
+{
+  "name": "ccc-skeleton-viewer",
+  "package_version": 2,
+  "version": "1.4.0.20220128",
+  "description": "用于快速预览骨骼动画，提供独立窗口，也可以附着在编辑器中...",
+  "author": "陈皮皮 (ifaswind)",
+  "author-info": {
+    "email": "952157129@qq.com",
+    "url": "https://chenpipi.cn",
+    "wechat": "im_chenpipi",
+    "git-home": "https://gitee.com/ifaswind",
+    "official-account": "公众号「菜鸟小栈」"
+  },
+  "repository": "https://gitee.com/ifaswind/ccc-skeleton-viewer",
+  "license": "MIT",
+  "main": "src/main/index.js",
+  "contributions": {
+    "menu": [
+      {
+        "path": "i18n:menu.extension/i18n:ccc-skeleton-viewer.name",
+        "label": "i18n:ccc-skeleton-viewer.view",
+        "message": "open-view-panel",
+        "icon": "/images/view.png"
+      },
+      {
+        "path": "i18n:menu.extension/i18n:ccc-skeleton-viewer.name",
+        "label": "i18n:ccc-skeleton-viewer.settings",
+        "message": "open-settings-panel",
+        "icon": "/images/settings.png"
+      },
+      {
+        "path": "i18n:menu.extension/i18n:ccc-skeleton-viewer.name",
+        "label": "i18n:ccc-skeleton-viewer.checkUpdate",
+        "message": "menu-check-update",
+        "icon": "/images/update.png"
+      },
+      {
+        "path": "i18n:menu.extension/i18n:ccc-skeleton-viewer.name",
+        "label": "v1.3.0.20210915",
+        "message": "menu-version",
+        "icon": "/images/version.png"
+      }
+    ],
+    "messages": {
+      "open-view-panel": {
+        "public": true,
+        "description": "打开预览面板",
+        "methods": [
+          "openViewPanel"
+        ]
+      },
+      "open-settings-panel": {
+        "public": true,
+        "description": "打开设置面板",
+        "methods": [
+          "openSettingsPanel"
+        ]
+      },
+      "menu-check-update": {
+        "public": true,
+        "description": "检查扩展是否有更新",
+        "methods": [
+          "menuCheckUpdate"
+        ]
+      },
+      "menu-version": {
+        "public": false,
+        "methods": [
+          "menuVersion"
+        ]
+      },
+      "scene:ready": {
+        "methods": [
+          "onSceneReady"
+        ]
+      },
+      "selection:select": {
+        "methods": [
+          "onSelectionSelect"
+        ]
+      }
+    },
+    "shortcuts": [
+      {
+        "message": "open-view-panel",
+        "mac": "",
+        "win": ""
+      }
+    ],
+    "assets": {
+      "menu": {
+        "methods": "src/editor/assets-menu.js",
+        "createMenu": "",
+        "assetMenu": "onAssetMenu",
+        "dbMenu": "",
+        "panelMenu": ""
+      }
+    }
+  },
+  "panels": {
+    "view": {
+      "title": "i18n:ccc-skeleton-viewer.name",
+      "type": "dockable",
+      "main": "src/renderer/view/entry.js",
+      "icon": "/images/icon.png",
+      "size": {
+        "width": 500,
+        "height": 600,
+        "min-width": 300,
+        "min-height": 250
+      },
+      "flags": {
+        "alwaysOnTop": false
+      }
+    }
+  }
+}

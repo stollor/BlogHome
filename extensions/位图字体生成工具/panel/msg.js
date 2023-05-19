@@ -1,0 +1,1 @@
+module.exports={OnLog:"Msg_OnLog",OnCharDel:"OnCharDel"};

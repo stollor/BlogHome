@@ -1,0 +1,1 @@
+.layout { display: flex; } .flex-1 { flex: 1; } .layout.vertical { flex-direction: column; } .layout.horizontal { flex-direction: row; } .layout.horizontal.center { align-items: center; } .layout.horizontal.center-center { align-items: center; justify-content: center; } .width100 { width: 100%; } .section-space { margin: 6px 0; } ui-prop { margin: 3px 0; }

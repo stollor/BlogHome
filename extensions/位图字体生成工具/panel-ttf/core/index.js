@@ -1,0 +1,1 @@
+const Fs=require("fs"),Path=require("path");function FontEngineRequire(e){let n=Path.join(__dirname,e);Fs.existsSync(n)&&require(n)}FontEngineRequire("main.js"),FontEngineRequire("fontLoader.js"),FontEngineRequire("font.js"),FontEngineRequire("util.js"),FontEngineRequire("save.js");

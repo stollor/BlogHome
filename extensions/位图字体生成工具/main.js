@@ -1,0 +1,1 @@
+const{name:name}=require("./package.json");exports.methods={openFNT(){Editor.Panel.open(`${name}.font`)},openTTF(){Editor.Panel.open(`${name}.ttf`)}};

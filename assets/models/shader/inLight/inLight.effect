@@ -1,0 +1,161 @@
+// Copyright (c) 2017-2020 Xiamen Yaji Software Co., Ltd.
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: sprite-vs:vert
+      frag: sprite-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties:
+        uSize: 
+          value: 14.4
+        uIntensity: 
+          value: 1.7
+        uGlowColor: 
+          value: 
+            - 0.690
+            - 0.408
+            - 1.000
+            - 1.000
+          inspector: 
+            type: color
+}%
+
+CCProgram sprite-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+  #if SAMPLE_FROM_RT
+    #include <common/common-define>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+
+  out vec4 color;
+  out vec2 uv0;
+
+  vec4 vert () {
+    vec4 pos = vec4(a_position, 1);
+
+    #if USE_LOCAL
+      pos = cc_matWorld * pos;
+    #endif
+
+    #if USE_PIXEL_ALIGNMENT
+      pos = cc_matView * pos;
+      pos.xyz = floor(pos.xyz);
+      pos = cc_matProj * pos;
+    #else
+      pos = cc_matViewProj * pos;
+    #endif
+
+    uv0 = a_texCoord;
+    #if SAMPLE_FROM_RT
+      CC_HANDLE_RT_SAMPLE_FLIP(uv0);
+    #endif
+    color = a_color;
+
+    return pos;
+  }
+}%
+
+CCProgram sprite-fs %{
+  precision highp float;
+  #include <cc-global>
+
+  in vec4 color;
+  uniform Constant {
+		vec4 uGlowColor;
+		float uSize;
+		float uIntensity;
+	};
+
+  #if USE_TEXTURE
+    in vec2 uv0;
+    #pragma builtin(local)
+    layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
+  #endif
+
+  vec4 c_InnerGlow_main_3(sampler2D Tex, vec2 UV, float Size, float Intensity, vec4 GlowColor) 
+	{
+	    float step1 = 0.005 * Size;
+	    float step2 = step1 * 2.0;
+	    vec4 result = vec4 (0, 0, 0, 0);
+	    vec2 texCoord = vec2(0, 0);
+	    texCoord = UV + vec2(-step2, -step2);
+	    result += (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(-step1, -step2); 
+	    result += 4.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(0, -step2); 
+	    result += 6.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(step1, -step2); 
+	    result += 4.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(step2, -step2); 
+	    result += (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(-step2, -step1); 
+	    result += 4.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(-step1, -step1); 
+	    result += 16.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(0, -step1); 
+	    result += 24.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(step1, -step1); 
+	    result += 16.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(step2, -step1); 
+	    result += 4.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(-step2, 0); 
+	    result += 6.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(-step1, 0); 
+	    result += 24.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV; 
+	    result += 36.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(step1, 0); 
+	    result += 24.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(step2, 0); 
+	    result += 6.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(-step2, step1); 
+	    result += 4.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(-step1, step1); 
+	    result += 16.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(0, step1); 
+	    result += 24.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(step1, step1); 
+	    result += 16.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(step2, step1); 
+	    result += 4.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(-step2, step2); 
+	    result += (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(-step1, step2); 
+	    result += 4.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(0, step2); 
+	    result += 6.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(step1, step2); 
+	    result += 4.0 * (1.0 - texture(Tex, texCoord).a);
+	    texCoord = UV + vec2(step2, step2); 
+	    result += (1.0 - texture(Tex, texCoord).a);
+	    result = result*0.00390625;
+	    result = mix(texture(Tex, UV), GlowColor * Intensity, result * GlowColor.a);
+	    result.a = texture(Tex, UV).a;
+	    return clamp(result, 0.0, 1.0);
+	}
+
+  vec4 frag () {
+    //vec4 o = vec4(1.0,1.0,1.0,1.0);
+    //o *= texture(cc_spriteTexture, uv0);
+    vec4 o= c_InnerGlow_main_3(cc_spriteTexture, uv0, uSize, uIntensity, vec4(uGlowColor));
+    o *= color;
+    
+    return o;
+  }
+}%

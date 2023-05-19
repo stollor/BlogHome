@@ -1,0 +1,58 @@
+{
+  "name": "bitmap-font",
+  "package_version": 2,
+  "version": "3.0.0",
+  "description": "快速生成位图字体的插件，这可能是你见过最好用，最强大的位图工具！",
+  "author": "xu_yanfeng",
+  "main": "main.js",
+  "contributions": {
+    "menu": [
+      {
+        "path": "i18n:menu.extension/BitMap字体工具",
+        "label": "字体图集(IMAGE)",
+        "message": "openFNT"
+      },
+      {
+        "path": "i18n:menu.extension/BitMap字体工具",
+        "label": "字体文件(TTF)",
+        "message": "openTTF"
+      }
+    ],
+    "messages": {
+      "openTTF": {
+        "methods": [
+          "openTTF"
+        ]
+      },
+      "openFNT": {
+        "methods": [
+          "openFNT"
+        ]
+      },
+      "fontPanelLog": {
+        "methods": [
+          "font.onLog"
+        ]
+      }
+    }
+  },
+  "panels": {
+    "font": {
+      "main": "panel/index.js",
+      "type": "dockable",
+      "title": "bitmap-font",
+      "width": 800,
+      "height": 580
+    },
+    "ttf": {
+      "main": "panel-ttf/index.js",
+      "type": "dockable",
+      "title": "bitmap-ttf",
+      "width": 800,
+      "height": 580,
+      "min-width": 800,
+      "min-height": 580
+    }
+  },
+  "_storeId": "ff279cda6bd1b860f0d80e7716c4b343"
+}

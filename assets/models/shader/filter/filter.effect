@@ -1,0 +1,130 @@
+// Copyright (c) 2017-2020 Xiamen Yaji Software Co., Ltd.
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: sprite-vs:vert
+      frag: sprite-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties:
+        useBrown: {value: 0.0 }
+        useGray: {value: 0.0 }
+        useReversal: {value: 0.0 }
+        useFrozen: {value: 0.0 }
+        useCartoon: {value: 0.0 }
+}%
+
+CCProgram sprite-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+  #if SAMPLE_FROM_RT
+    #include <common/common-define>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+
+  out vec4 color;
+  out vec2 uv0;
+
+  vec4 vert () {
+    vec4 pos = vec4(a_position, 1);
+
+    #if USE_LOCAL
+      pos = cc_matWorld * pos;
+    #endif
+
+    #if USE_PIXEL_ALIGNMENT
+      pos = cc_matView * pos;
+      pos.xyz = floor(pos.xyz);
+      pos = cc_matProj * pos;
+    #else
+      pos = cc_matViewProj * pos;
+    #endif
+
+    uv0 = a_texCoord;
+    #if SAMPLE_FROM_RT
+      CC_HANDLE_RT_SAMPLE_FLIP(uv0);
+    #endif
+    color = a_color;
+
+    return pos;
+  }
+}%
+
+CCProgram sprite-fs %{
+  precision highp float;
+  in vec4 color;
+
+  uniform Constant{
+    float useBrown;
+    float useGray;
+    float useReversal;
+    float useFrozen;
+    float useCartoon;
+    float _BlurOffsetX;
+    float _BlurOffsetY;
+  };
+
+  #if USE_TEXTURE
+    in vec2 uv0;
+    #pragma builtin(local)
+    layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
+  #endif
+
+
+  vec4 frag () {
+    vec4 o = vec4(1.0,1.0,1.0,1.0);
+    o *= texture(cc_spriteTexture, uv0);
+    if(useBrown>0.5){
+      float _r = o.r * 0.393 + o.g * 0.769 + o.b * 0.189;
+      float _g = o.r * 0.349 + o.g * 0.686 + o.b * 0.168;
+      float _b = o.r * 0.272 + o.g * 0.534 + o.b * 0.131;
+       o = vec4(_r, _g, _b, o.a);
+    }
+
+    if(useGray>0.5){
+      float gray  = 0.3 * o.r + 0.7 * o.g + 0.1 * o.b;
+      o = vec4(gray, gray, gray, o.a);
+    }
+
+
+    if(useReversal>0.5){
+      float _r = 255.0 / 256.0 - o.r;
+      float _g = 255.0 / 256.0 - o.g;
+      float _b = 255.0 / 256.0 - o.b;
+      o = vec4(_r, _g, _b, o.a);
+    }
+
+    if(useFrozen>0.5){
+      float r = abs(o.r - o.g - o.b) * 1.5;
+      float g = abs(o.g - o.b - o.r) * 1.5;
+      float b = abs(o.b - o.r - o.g) * 1.5;
+      o = vec4(r, g, b, o.a);
+    }
+
+    
+    if(useCartoon>0.5){
+      float _r = abs(o.g - o.b + o.g + o.r) * o.r;
+      float _g = abs(o.b - o.g + o.b + o.r) * o.r;
+      float _b = abs(o.b - o.g + o.b + o.r) * o.g;
+      o = vec4(_r, _g, _b, o.a);
+    }
+    
+    o *= color;
+    
+    return o;
+  }
+}%

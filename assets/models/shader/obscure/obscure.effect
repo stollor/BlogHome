@@ -1,0 +1,235 @@
+// Copyright (c) 2017-2020 Xiamen Yaji Software Co., Ltd.
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: sprite-vs:vert
+      frag: sprite-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties:
+        useGaussianBlur: {value: 0.0 }
+        useGaussianBlurLinear13: {value: 0.0 }
+        useBlur1: {value: 0.0 }
+        useBlur2: {value: 0.0 }
+        useGray: {value: 0.0 }
+        useMosaic: {value: 0.0 }
+        _BlurOffsetX: {value: 0,editor: { slide: true, range: [0, 1.0], step: 0.0001 }}
+        _BlurOffsetY: {value: 0,editor: { slide: true, range: [0, 1.0], step: 0.0001 }}
+}%
+
+CCProgram sprite-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+  #if SAMPLE_FROM_RT
+    #include <common/common-define>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+
+  out vec4 color;
+  out vec2 uv0;
+
+  vec4 vert () {
+    vec4 pos = vec4(a_position, 1);
+
+    #if USE_LOCAL
+      pos = cc_matWorld * pos;
+    #endif
+
+    #if USE_PIXEL_ALIGNMENT
+      pos = cc_matView * pos;
+      pos.xyz = floor(pos.xyz);
+      pos = cc_matProj * pos;
+    #else
+      pos = cc_matViewProj * pos;
+    #endif
+
+    uv0 = a_texCoord;
+    #if SAMPLE_FROM_RT
+      CC_HANDLE_RT_SAMPLE_FLIP(uv0);
+    #endif
+    color = a_color;
+
+    return pos;
+  }
+}%
+
+CCProgram sprite-fs %{
+  precision highp float;
+  in vec4 color;
+
+  uniform Constant{
+    float useGaussianBlur;
+    float useGaussianBlurLinear13;
+    float useBlur1;
+    float useBlur2;
+    float useGray;
+    float useMosaic;
+    float _BlurOffsetX;
+    float _BlurOffsetY;
+    
+  };
+
+
+  #if USE_TEXTURE
+    in vec2 uv0;
+    #pragma builtin(local)
+    layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
+  #endif
+
+  const float RADIUS = 10.0;
+  const vec2 size=vec2(432.0,948.0);
+
+  //随机值
+  float rand(vec2 co) {
+    return fract(sin(dot(co.xy , vec2(12.9898, 78.233))) * 43758.5453);
+  }
+
+  //二维高斯获取模糊颜色  性能爆炸
+  vec4 GaussianBlur (sampler2D tex, vec2 pos) {
+    vec4 color = vec4(0,0,0,0); // 初始颜色
+    float sum = 0.0;
+    for (float r = -RADIUS; r <= RADIUS; r++) {
+      for(float c = -RADIUS; c <= RADIUS; c++){
+        vec2 target = pos + vec2(r / size.x,c/size.y);
+        float weight = (RADIUS - abs(r)) * (RADIUS - abs(c));
+        color += texture(tex, target)*weight;
+        sum += weight;
+      }
+    }
+    color = color/sum; 
+    return color;
+  }
+
+  //一维高斯 需要多次迭代才有最佳效果
+  vec4 GaussianBlurLinear13(sampler2D tex, vec2 pos) {
+    	vec4 color = 0.1964825501511404 * texture(tex, pos);
+
+      color += 0.2969069646728344 * texture(tex, pos + vec2(1.411764705882353 * _BlurOffsetX  ,1.411764705882353 * _BlurOffsetY ));
+      color += 0.2969069646728344 * texture(tex, pos + vec2(-1.411764705882353 * _BlurOffsetX  , -1.411764705882353 * _BlurOffsetY ));
+      color += 0.09447039785044732 * texture(tex, pos + vec2(3.2941176470588234 * _BlurOffsetX  , 3.2941176470588234 * _BlurOffsetY ));
+      color += 0.09447039785044732 * texture(tex, pos + vec2(-3.2941176470588234 * _BlurOffsetX  , -3.2941176470588234 * _BlurOffsetY ));
+      
+      color += 0.010381362401148057 * texture(tex, pos + vec2(5.176470588235294 * _BlurOffsetX  , 5.176470588235294 * _BlurOffsetY ));
+      color += 0.010381362401148057 * texture(tex, pos + vec2(-5.176470588235294 * _BlurOffsetX  , -5.176470588235294 * _BlurOffsetY ));
+      return color;
+  }
+
+  //简单获取模糊颜色  效果较差
+  vec4 easyBlur (sampler2D tex, vec2 pos) {
+    vec4 color = vec4(0,0,0,0); // 初始颜色
+    float sum = 0.0;
+
+    for (float r = -RADIUS; r <= RADIUS; r++) {
+      vec2 target = pos + vec2(r / size.x,0.0);
+      float weight = (RADIUS - abs(r));
+      color += texture(tex, target)*weight;
+      sum += weight;
+    }
+    for(float c = -RADIUS; c <= RADIUS; c++){
+      vec2 target = pos + vec2(0.0,c/size.y);
+      float weight = (RADIUS - abs(c));
+      color += texture(tex, target)*weight;
+      sum +=weight;
+    }
+    color = color/sum; 
+    return color;
+  }
+
+	// 重复次数，值越大模糊质量越高，但性能越低
+  const float repeats=16.0;
+  vec4 easyBlur2(sampler2D tex, vec2 pos){
+		// 模糊值
+		float _blurAmount = 0.08 * 0.2;
+		vec4 color = vec4(0.0);
+
+		// 重复采样
+		for(float i = 0.0; i < repeats; i ++ ) {
+			// 第一采样点
+			vec2 q = vec2(cos(degrees((i / repeats) * 360.0)), sin(degrees((i / repeats) * 360.0))) * (rand(vec2(i, pos.x + pos.y)) + _blurAmount);
+			vec2 uv2 = pos + (q * _blurAmount);
+			color += texture(tex, uv2).rgba / 2.0;
+			
+			// 第二采样点
+			q = vec2(cos(degrees((i / repeats) * 360.0)), sin(degrees((i / repeats) * 360.0))) * (rand(vec2(i + 2.0, pos.x + pos.y + 24.0)) + _blurAmount);
+			uv2 = pos + (q * _blurAmount);
+			color += texture(tex, uv2).rgba / 2.0;
+		}
+    color = color/repeats; 
+    color = color/1.0;
+    return color;
+  }
+
+
+  vec2 getUvMapPos(vec2 pos,float count) {
+    float block_w = 1.0 / count;
+    float block_x_idx = floor(pos.x / block_w);
+
+    float block_h = 1.0 / count;
+    float block_y_idx = floor(pos.y / block_h);
+
+    return vec2(block_w * (block_x_idx + 0.5), block_h * (block_y_idx + 0.5));
+  }
+
+   
+  vec4 frag () {
+    vec4 o = vec4(1.0,1.0,1.0,1.0);
+    vec4 blurColor = vec4(0.0,0.0,0.0,0.0);
+    vec2 realPos = uv0;
+
+    float useFunNum=0.0;
+
+    if(useMosaic>1.0){
+      realPos=getUvMapPos(uv0,useMosaic);
+    }
+
+    if(useGaussianBlur>0.5){
+      useFunNum=useFunNum+1.0;
+      blurColor +=GaussianBlur(cc_spriteTexture,realPos);
+    }
+
+    if(useGaussianBlurLinear13>0.5){
+      useFunNum=useFunNum+1.0;
+      blurColor +=GaussianBlurLinear13(cc_spriteTexture,realPos);
+    }
+
+
+    if(useBlur1>0.5){
+      useFunNum=useFunNum+1.0;
+      blurColor +=easyBlur(cc_spriteTexture,realPos);
+    }
+
+    if(useBlur2>0.5){
+      useFunNum=useFunNum+1.0;
+      blurColor +=easyBlur2(cc_spriteTexture,realPos);
+    }
+    
+    if(useFunNum==0.0){
+      o *= texture(cc_spriteTexture, realPos);
+    }else{
+      blurColor = blurColor / useFunNum;
+      o *= blurColor;
+    }
+
+    if(useGray>0.0){
+      float gray  = 0.3 * o.r + 0.7 * o.g + 0.1 * o.b;
+      o.r = o.g = o.b = gray;
+    }
+    o *= color;
+    
+    return o;
+  }
+}%

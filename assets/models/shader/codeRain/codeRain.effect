@@ -1,0 +1,154 @@
+
+CCEffect %{
+techniques: 
+  - passes: 
+      - vert: sprite-vs:vert
+        frag: sprite-fs:frag
+        depthStencilState: 
+          depthTest: false
+          depthWrite: false
+        blendState: 
+          targets: 
+            - blend: true
+              blendSrc: src_alpha
+              blendDst: one_minus_src_alpha
+              blendDstAlpha: one_minus_src_alpha
+        rasterizerState: 
+          cullMode: none
+        properties: 
+          alphaThreshold: 
+            value: 0.5
+          uSpeed: 
+            value: -0.4
+          uScale: 
+            value: 2.1
+          uAlphaThreshold: 
+            value: 0.9
+}%
+        
+CCProgram sprite-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+  #if SAMPLE_FROM_RT
+    #include <common/common-define>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+
+  out vec4 color;
+  out vec2 uv0;
+
+  vec4 vert () {
+    vec4 pos = vec4(a_position, 1);
+
+    #if USE_LOCAL
+      pos = cc_matWorld * pos;
+    #endif
+
+    #if USE_PIXEL_ALIGNMENT
+      pos = cc_matView * pos;
+      pos.xyz = floor(pos.xyz);
+      pos = cc_matProj * pos;
+    #else
+      pos = cc_matViewProj * pos;
+    #endif
+
+    uv0 = a_texCoord;
+    #if SAMPLE_FROM_RT
+      CC_HANDLE_RT_SAMPLE_FLIP(uv0);
+    #endif
+    color = a_color;
+
+    return pos;
+  }
+}%
+
+CCProgram sprite-fs %{
+  precision highp float;
+  #include <embedded-alpha>
+  #include <alpha-test>
+  #include <cc-global>
+  in vec4 color;
+  #if USE_TEXTURE
+    in vec2 uv0;
+    #pragma builtin(local)
+    layout(set = 2, binding = 10) uniform sampler2D cc_spriteTexture;
+  #endif
+
+  uniform Constant {
+		float uSpeed;
+		float uScale;
+		float uAlphaThreshold;
+	};
+
+vec2 c_UV0_main_4() {
+	    return uv0;
+	}
+	float c_MatrixTerminal_vorocloud_3(vec2 p, float seed, float speed){
+	float f = 0.0;
+	    vec2 pp = cos(vec2(p.x * 14.0, (16.0 * p.y + cos(floor(p.x * 30.0)) + seed * speed * 6.28318530718)) );
+	    p = cos(p * 12.1 + pp * 10.0 + 0.5 * cos(pp.x * 10.0));
+	    vec2 pts[4];
+	    pts[0] = vec2(0.5, 0.6);
+	    pts[1] = vec2(-0.4, 0.4);
+	    pts[2] = vec2(0.2, -0.7);
+	    pts[3] = vec2(-0.3, -0.4);
+	    float d = 5.0;
+	    for(int i = 0; i < 4; i++){
+	      
+	pts[i].x += 0.03 * cos(float(i)) + p.x;
+	      
+	pts[i].y += 0.03 * sin(float(i)) + p.y;
+	    
+	d = min(d, distance(pts[i], pp));
+	    }
+	    f = 2.0 * pow(1.0 - 0.3 * d, 13.0);
+	    f = min(f, 1.0);
+	return f;
+	}
+	vec4 c_MatrixTerminal_scene_3(vec2 UV, float seed, float speed, float scale){
+	    float x = UV.x;
+	    float y = UV.y;
+	    vec2 p = (vec2(x, y) - vec2(0.5)) / scale;
+	    vec4 col = vec4(0.0);
+	col.g += 0.02;
+	    float v = c_MatrixTerminal_vorocloud_3(p, seed, speed);
+	    v = 0.2 * floor(v * 5.0);
+	    col.r += 0.1 * v;
+	    col.g += 0.6 * v;
+	    col.b += 0.5 * pow(v, 5.0);
+	    v = c_MatrixTerminal_vorocloud_3(p * 2.0, seed, speed);
+	    v = 0.2 * floor(v * 5.0);
+	    col.r += 0.1 * v;
+	    col.g += 0.2 * v;
+	    col.b += 0.01 * pow(v, 5.0);
+	    col.a = 1.0;
+	    return col;
+	}
+	vec4 c_MatrixTerminal_main_3(vec2 UV, float Seed, float Speed, float Scale, float AlphaThreshold) {
+		vec2 uv = UV;
+		vec4 col = c_MatrixTerminal_scene_3(uv, Seed, Speed, Scale);
+		col.a = smoothstep(AlphaThreshold, 1.0, col.r + col.g + col.b);
+		return col;
+	}
+	vec4 c_Output_main_1(vec4 Color) { 
+	    return Color; 
+	}
+	vec4 shaderfx()                                    
+	{                                              
+	    vec2 out_UV_UV0_4 = c_UV0_main_4();
+	    vec4 out_Output_MatrixTerminal_3 = c_MatrixTerminal_main_3(vec2(out_UV_UV0_4), cc_time[0], uSpeed, uScale, uAlphaThreshold);
+	    return c_Output_main_1(vec4(out_Output_MatrixTerminal_3));
+	}                                              
+	
+  vec4 frag () {
+     vec4 o = shaderfx();
+       o *= color;
+     ALPHA_TEST(o);
+     return o;
+   }
+ }%
