@@ -1,0 +1,129 @@
+// Copyright (c) 2017-2020 Xiamen Yaji Software Co., Ltd.
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: sprite-vs:vert
+      frag: sprite-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties:
+        round: { value: 0.1, editor: { tooltip: '圆角半径（百分比）' } }
+        feather: { value: 0.01, editor: { tooltip: '边缘虚化（百分比）' } }
+}%
+
+CCProgram sprite-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+  #if SAMPLE_FROM_RT
+    #include <common/common-define>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+
+  out vec4 color;
+  out vec2 uv0;
+
+  vec4 vert () {
+    vec4 pos = vec4(a_position, 1);
+
+    #if USE_LOCAL
+      pos = cc_matWorld * pos;
+    #endif
+
+    #if USE_PIXEL_ALIGNMENT
+      pos = cc_matView * pos;
+      pos.xyz = floor(pos.xyz);
+      pos = cc_matProj * pos;
+    #else
+      pos = cc_matViewProj * pos;
+    #endif
+
+    uv0 = a_texCoord;
+    #if SAMPLE_FROM_RT
+      CC_HANDLE_RT_SAMPLE_FLIP(uv0);
+    #endif
+    color = a_color;
+
+    return pos;
+  }
+}%
+
+CCProgram sprite-fs %{
+  precision highp float;
+  in vec4 color;
+
+  // 自定义属性
+  uniform Properties {
+    float round;    // 圆角半径
+    float feather;  // 边缘虚化
+  };
+
+  #if USE_TEXTURE
+    in vec2 uv0;
+    #pragma builtin(local)
+    layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
+  #endif
+
+  // 获取圆角
+  float getAlpha(vec2 uv) {
+    vec2 vertex;
+    if (uv.x <= round) {
+      if (uv.y <= round) {
+        vertex = vec2(round, round);                // 左上
+      } else if (uv.y >= 1.0 - round) {
+        vertex = vec2(round, (1.0 - round));        // 左下
+      } else {
+        vertex = vec2(round, uv.y);                 // 左
+      }
+    } else if (uv.x >= 1.0 - round) {
+      if (uv.y <= round){
+        vertex = vec2(1.0 - round, round);          // 右上
+      } else if (uv.y >= 1.0 - round) {
+        vertex = vec2(1.0 - round, (1.0 - round));  // 右下
+      } else {
+        vertex = vec2(1.0 - round, uv.y);           // 右
+      }
+    } else if (uv.y <= round) {
+      vertex = vec2(uv.x, round);                   // 上
+    } else if (uv.y >= 1.0 - round) {
+      vertex = vec2(uv.x, (1.0 - round));           // 下
+    } else {
+      vertex = uv;                                  // 中
+    }
+    // 插值
+    float dis = distance(uv, vertex);
+    return smoothstep(round, round - feather, dis);
+  }
+
+
+
+  vec4 frag () {
+    vec4 o = vec4(1.0,1.0,1.0,1.0);
+    o *= texture(cc_spriteTexture, uv0);
+    o *= color;
+    
+    // 处理圆角
+    if (round > 0.0) {
+      o.a *= getAlpha(uv0);
+    }
+    // 跳过透明像素
+    if (o.a == 0.0) {
+      discard;
+    }
+
+    return o;
+  }
+}%

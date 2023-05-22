@@ -2,18 +2,18 @@
 #///////////////////////////
 # Cocos Creator 3D Project
 #///////////////////////////
-library/
-profiles/
-temp/
-local/
-native
-extensions/
-build/*
-!build/release
+/library
+/profiles
+/temp
+/local
+/native
+/extensions
+/build
+!/build/release
 #//////////////////////////
 # NPM
 #//////////////////////////
-node_modules/
+
 
 #//////////////////////////
 # VSCode
