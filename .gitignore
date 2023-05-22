@@ -8,8 +8,8 @@
 /local
 /native
 /extensions
-/build
-!/build/release
+/build/web-mobile*/
+
 #//////////////////////////
 # NPM
 #//////////////////////////
