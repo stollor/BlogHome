@@ -8,7 +8,7 @@ temp/
 local/
 native
 extensions/
-build/
+build/*
 !build/release
 #//////////////////////////
 # NPM
