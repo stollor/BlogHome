@@ -15,7 +15,7 @@ enum Event {
 @ccclass('PageViewManager')
 export class PageViewManager extends Manager<Event> {
     public static Event = Event
-    @property({displayName:"启用"}) private _enabled: boolean = false
+    @property private _enabled: boolean = false
     @property("boolean") get enabled() { return this._enabled }
     set enabled(value: boolean) {
         if (value == this._enabled) return
@@ -30,30 +30,28 @@ export class PageViewManager extends Manager<Event> {
         range: [0, 1],
         slide: true,
         step: 0.01,
-        displayName:"滚动阈值",
-        tooltip:"",
-        visible: function () { return this.enabled }
+        visible: function () { return this.enabled },
+        tooltip: "滚动临界值，默认单位百分比，当拖拽超出该数值时，松开会自动滚动下一页，小于时则还原"
     }) scrollThreshold: number = 0.5
 
     @property({
         range: [0, 1],
         slide: true,
         step: 0.01,
-        displayName:"翻页时间",
-        tooltip:"",
-        visible: function () { return this.enabled }
+        visible: function () { return this.enabled },
+        tooltip: "设置 PageView PageTurning 事件的发送时机"
     }) pageTurningEventTiming: number = 0.1
 
     @property({
-        displayName:"自动翻页阈值",
-        tooltip:"",
-        visible: function () { return this.enabled }
+        visible: function () { return this.enabled },
+        tooltip: `快速滑动翻页临界值
+        当用户快速滑动时，会根据滑动开始和结束的距离与时间计算出一个速度值
+        该值与此临界值相比较，如果大于临界值，则进行自动翻页`
     }) autoPageTurningThreshold: number = 100
 
     @property({
-        displayName:"翻页速度",
-        tooltip:"",
-        visible: function () { return this.enabled }
+        visible: function () { return this.enabled },
+        tooltip: "每个页面翻页时所需时间。单位：秒"
     }) pageTurningSpeed: number = 0.3
     private _currentIndex: number = 0
     get currentIndex() { return this._currentIndex }

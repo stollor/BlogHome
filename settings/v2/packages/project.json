@@ -34,6 +34,10 @@
       {
         "index": 6,
         "name": "testItem"
+      },
+      {
+        "index": 7,
+        "name": "UIButton"
       }
     ],
     "collisionMatrix": {

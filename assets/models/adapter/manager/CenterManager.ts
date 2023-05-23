@@ -8,26 +8,26 @@ const { ccclass, property } = _decorator;
 @ccclass('CenterManager')
 export class CenterManager extends Manager {
     @property private _enabled: boolean = false
-    @property({displayName:"启用"}) get enabled() { return this._enabled }
+    @property("boolean") get enabled() { return this._enabled }
     set enabled(value: boolean) {
         if (value == this._enabled) return
         this._enabled = value
     }
     @property({
-        displayName:"启用",
-        visible: function () { return this.enabled }
+        visible: function () { return this.enabled },
+        tooltip: "自动居中动画的时长"
     }) duration: number = 1
     @property({
         range: [0, 1],
         slide: true,
-        displayName:"容器锚点",
         step: 0.1,
+        tooltip: "容器(view)的锚点,当滚动停止时,元素锚点位置会和容器锚点位置重合"
     }) containerAnchorPoint: number = 0
     @property({
         range: [0, 1],
         slide: true,
-        displayName:"元素锚点",
         step: 0.1,
+        tooltip: "元素(item)的锚点位置,当滚动停止时,元素锚点位置会和容器锚点位置重合"
     }) elementAnchorPoint: number = 0
 
     public get max() {

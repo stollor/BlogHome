@@ -1,58 +1,34 @@
 import { Enum } from "cc";
 
-/**方向 */
 export enum Orientation {
-    /**纵向*/
     Vertical,
-    /**横向 */
     Horizontal
 }
-/**移动类型 */
 export enum MovementType {
-    /**不受限制 */
     Unrestricted,
-    /**弹性*/
     Elastic,
-    /** 固定*/
     Clamped
 }
-
-/**排列坐标轴 */
 export enum ArrangeAxis {
     Start,
     End
 }
-
-/**拉伸方向 */
 export enum StretchDirection {
-    /**自动 */
     Auto,
-    /**头 */
     Header,
-    /**尾 */
     Footer,
-    /**中心 */
     Center,
 }
-
-/**层级 */
 export enum Layer {
     Lowest,
     Medium,
     Highest
 }
-
-/**循环模式 */
 export enum WrapMode {
-    /**自动 */
     Auto,
-    /**循环 */
     Wrap,
-    /**不循环 */
     Nowrap
 }
-
-/**触摸类型 */
 export enum TouchMode {
     /** 当内容未填满时 并且未开启PullRelease 并且 未开启Center 功能是不可滑动 */
     Auto,
@@ -113,6 +89,15 @@ export enum ReleaseState {
     PULL = 'PULL',
     WAIT = 'WAIT',
     RELEASE = "RELEASE",
+}
+export enum HolderEvent {
+    CREATED = "ADAPTER:HOLDER:CREATED",
+    VISIBLE = "ADAPTER:HOLDER:VISIBLE",
+    DISABLE = "ADAPTER:HOLDER:DISABLE",
+}
+export enum ViewEvent {
+    VISIBLE = "ADAPTER:VIEW:VISIBLE",
+    DISABLE = "ADAPTER::VIEW:DISABLE",
 }
 Enum(Orientation)
 Enum(MovementType)

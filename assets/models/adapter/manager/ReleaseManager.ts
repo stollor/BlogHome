@@ -12,7 +12,7 @@ enum Event {
 @ccclass('ReleaseManager')
 export class ReleaseManager extends Manager<Event> {
     static Event = Event
-    @property({displayName:"启用"}) private _enabled: boolean = false
+    @property private _enabled: boolean = false
     @property("boolean") get enabled() { return this._enabled }
     set enabled(value: boolean) {
         if (value == this._enabled) return
@@ -22,28 +22,32 @@ export class ReleaseManager extends Manager<Event> {
         range: [0, 1],
         slide: true,
         step: 0.01,
-        visible: function () { return this.enabled }
+        visible: function () { return this.enabled },
+        tooltip: "根据此阈值来切换state状态"
     }) left: number = 0
 
     @property({
         range: [0, 1],
         slide: true,
         step: 0.01,
-        visible: function () { return this.enabled }
+        visible: function () { return this.enabled },
+        tooltip: "根据此阈值来切换state状态"
     }) right: number = 0
 
     @property({
         range: [0, 1],
         slide: true,
         step: 0.01,
-        visible: function () { return this.enabled }
+        visible: function () { return this.enabled },
+        tooltip: "根据此阈值来切换state状态"
     }) top: number = 0
 
     @property({
         range: [0, 1],
         slide: true,
         step: 0.01,
-        visible: function () { return this.enabled }
+        visible: function () { return this.enabled },
+        tooltip: "根据此阈值来切换state状态"
     }) bottom: number = 0
     private _pullUp: ReleaseEvent
     private _pullDown: ReleaseEvent
@@ -76,7 +80,6 @@ export class ReleaseManager extends Manager<Event> {
         this.adapter.scrollManager.on(ScrollManager.Event.ON_SCROLL_END, this.onScrollEnd, this)
         this.adapter.scrollManager.on(ScrollManager.Event.ON_SCROLL_CANCEL, this.onScrollEnd, this)
         this.checkLoop()
-        console.log("release创建完成")
     }
     private checkLoop() {
         if (this.adapter.isHorizontal) {

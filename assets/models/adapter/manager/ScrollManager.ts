@@ -1,4 +1,4 @@
-import { UITransform, Widget, _decorator, Node, EventTouch, Vec3, instantiate, EventMouse, macro, easing, Label, sp, Graphics, Color, CCBoolean } from 'cc';
+import { UITransform, Widget, _decorator, Node, EventTouch, Vec3, instantiate, EventMouse, macro, easing, Label, sp, Graphics, Color } from 'cc';
 import { Manager } from '../abstract/Manager';
 import { ScrollAdapter } from '../abstract/ScrollAdapter';
 import { ADAPTER_DEBUG_CONTENT, DEBUG_DRAW_LIND_WIDTH, DEBUG_DRAW_FILL_COLOR, DEBUG_DRAW_BORDER_COLOR } from '../define/debug';
@@ -68,45 +68,49 @@ export class ScrollManager extends Manager {
     private set content(value: UITransform) {
         this._content = value
     }
-    @property({ type: Orientation}) private _orientation: Orientation = Orientation.Vertical
-    @property({ type: Orientation,displayName:"滚动方向",tooltip:""}) get orientation() { return this._orientation }
+    @property({ type: Orientation }) private _orientation: Orientation = Orientation.Vertical
+    @property({ type: Orientation }) get orientation() { return this._orientation }
     set orientation(value: Orientation) {
         if (value == this._orientation) return
         this._orientation = value
         this.emit(Event.ON_CHANGED_ORIENTATION)
     }
-    @property({ type: TouchMode ,displayName:"触摸类型",tooltip:""}) touchMode: TouchMode = TouchMode.Auto
-    @property({ type: MovementType,displayName:"移动类型",tooltip:"" }) movementType: MovementType = MovementType.Elastic
+    @property({
+        type: TouchMode,
+        tooltip: `Auto: 当内容撑满可视区域或开启ReleaseManager时允许拖动
+        AlwaysAllow: 任何情况下都可以拖动，即使没有任何元素
+        Disabled: 任何情况下都禁用拖动
+        `
+    }) touchMode: TouchMode = TouchMode.Auto
+    @property({ type: MovementType }) movementType: MovementType = MovementType.Elastic
     @property({
         range: [0, 1], slide: true, step: 0.001,
-        displayName:"弹性系数",tooltip:"",
         visible: function () { return this.movementType == MovementType.Elastic }
     }) elasticity: number = 0.1
-    @property({displayName:"惯性",tooltip:""})inertia: boolean = true
+    @property inertia: boolean = true
     @property({
         range: [0, 1], slide: true, step: 0.001,
-        displayName:"减速率",tooltip:"",
         visible: function () { return this.inertia }
     }) decelerationRate: number = 0.135
     // TODO 鼠标滚轮暂时不做，感觉不是必要功能
     // @property scrollSensitivity: number = 0.01 
     @property({
-        displayName:"停止速度阈值",
         tooltip: "当滚动速度小于这个值时，会发送ON_ABOUT_TO_STOP广播"
     }) aboutToStopVelocity: number = 100
     @property({
-        displayName:"取消子节点事件",
         tooltip: "取消子节点的Button点击事件"
     }) cancelInnerEvents: boolean = true
     @property({
         range: [0, 0.5], slide: true, step: 0.001,
-        displayName:"最小嵌套阈值",
-        visible: function () { return this.inertia }
+        visible: function () { return this.inertia },
+        tooltip: `嵌套时，当子元素的ScrollView拖动方向和当前拖动方向相同时，使用当前阈值进行计算由谁来处理拖动
+        无特殊需求时，默认值即可`
     }) nestedMinThreshold: number = 0.001
     @property({
         range: [0.5, 1], slide: true, step: 0.001,
-        displayName:"最大嵌套阈值",
-        visible: function () { return this.inertia }
+        visible: function () { return this.inertia },
+        tooltip: `嵌套时，当子元素的ScrollView拖动方向和当前拖动方向相同时，使用当前阈值进行计算由谁来处理拖动
+        无特殊需求时，默认值即可`
     }) nestedMaxThreshold: number = 0.999
     private __debug_graphics: Graphics
     private _boundaryOffset: number = 0
@@ -268,7 +272,7 @@ export class ScrollManager extends Manager {
     }
     private _simulateEvent(event: EventTouch, type: string, isSimulate: boolean = true) {
         if (!event) return
-        const _event = new EventTouch(event.getTouches(), event.bubbles,type);
+        const _event = new EventTouch(event.getTouches(), event.bubbles)
         var target = event.target as Node
         _event.type = type
         _event.touch = event.touch

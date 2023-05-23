@@ -12,8 +12,11 @@ enum Event {
 @ccclass('LayoutManager')
 export class LayoutManager extends Manager {
     public static Event = Event
-    @property({ type: ChildAlignment}) private _childAlignment: ChildAlignment = ChildAlignment.UpperLeft
-    @property({ type: ChildAlignment,displayName:"字节点队列",tooltip:"" }) public get childAlignment() { return this._childAlignment }
+    @property({ type: ChildAlignment }) private _childAlignment: ChildAlignment = ChildAlignment.UpperLeft
+    @property({
+        type: ChildAlignment,
+        tooltip: "布局元素的对齐方式"
+    }) public get childAlignment() { return this._childAlignment }
     public set childAlignment(value: ChildAlignment) {
         if (value == this._childAlignment) return
         this._childAlignment = value
@@ -21,7 +24,9 @@ export class LayoutManager extends Manager {
     }
 
     @property private _spacing: number = 0
-    @property get spacing() { return this._spacing }
+    @property({
+        tooltip: "元素交叉轴布局的间距"
+    }) get spacing() { return this._spacing }
     public set spacing(value: number) {
         if (value == this._spacing) return
         this._spacing = value
@@ -29,50 +34,72 @@ export class LayoutManager extends Manager {
     }
 
     @property private _reverseArrangement: boolean = false
-    @property({displayName:"反转排序",tooltip:""}) get reverseArrangement() { return this._reverseArrangement }
+    @property({
+        tooltip: "反转布局"
+    }) get reverseArrangement() { return this._reverseArrangement }
     set reverseArrangement(value: boolean) {
         if (value == this._reverseArrangement) return
         this._reverseArrangement = value
         this.emit(Event.ON_CHANGED_LAYOUT_STATE)
     }
-    @property({displayName:"延迟布局",tooltip:""}) delayLayout: boolean = true
-    @property private _forceExpandWidth: boolean = true
-    @(property as any)({ group: { id: "0", name: "forceExpand" },displayName:"强制扩展宽度",tooltip:"" }) get forceExpandWidth() { return this._forceExpandWidth }
+    @property({
+        tooltip: "延迟布局，开启后会统一在下一帧布局，建议开启"
+    }) delayLayout: boolean = true
+    @property private _forceExpandWidth: boolean = false
+    @(property as any)({
+        group: { id: "0", name: "forceExpand" },
+        tooltip: "是否强制布局元素宽度扩展以填充额外的可用空间"
+    }) get forceExpandWidth() { return this._forceExpandWidth }
     public set forceExpandWidth(value: boolean) {
         if (value == this._forceExpandWidth) return
         this._forceExpandWidth = value
         this.emit(Event.ON_CHANGED_LAYOUT_STATE)
     }
     @property private _forceExpandHeight: boolean = true
-    @(property as any)({ group: { id: "0", name: "forceExpand" },displayName:"强制扩展高度",tooltip:"" }) get forceExpandHeight() { return this._forceExpandHeight }
+    @(property as any)({
+        group: { id: "0", name: "forceExpand" },
+        tooltip: "是否强制布局元素高度扩展以填充额外的可用空间"
+    }) get forceExpandHeight() { return this._forceExpandHeight }
     public set forceExpandHeight(value: boolean) {
         if (value == this._forceExpandHeight) return
         this._forceExpandHeight = value
         this.emit(Event.ON_CHANGED_LAYOUT_STATE)
     }
     @property private _controlSizeWidth: boolean = false
-    @(property as any)({ group: { id: "0", name: "controlSize" } ,displayName:"控件宽度",tooltip:""}) get controlSizeWidth() { return this._controlSizeWidth }
+    @(property as any)({
+        group: { id: "0", name: "controlSize" },
+        tooltip: "如果设置为 false，布局只会影响元素的位置，而不会影响宽度，在这种情况下你可以设置元素的宽度\n如果设置为 true，元素的宽度将由布局根据它们各自的 IElement.minSize、IElement.preferredSize、IElement.flexibleSize自动设置。如果元素的宽度应根据可用空间的大小而变化，应开启此功能。在这种情况下不能直接设置每个元素的宽度，但可以通过控制每个元素的IElement.minSize、IElement.preferredSize、IElement.flexibleSize来进行控制"
+    }) get controlSizeWidth() { return this._controlSizeWidth }
     public set controlSizeWidth(value: boolean) {
         if (value == this._controlSizeWidth) return
         this._controlSizeWidth = value
         this.emit(Event.ON_CHANGED_LAYOUT_STATE)
     }
     @property private _controlSizeHeight: boolean = false
-    @(property as any)({ group: { id: "0", name: "controlSize" } ,displayName:"控件高度",tooltip:""}) get controlSizeHeight() { return this._controlSizeHeight }
+    @(property as any)({
+        group: { id: "0", name: "controlSize" },
+        tooltip: "如果设置为 false，布局只会影响元素的位置，而不会影响高度，在这种情况下你可以设置元素的高度\n如果设置为 true，元素的高度将由布局根据它们各自的 IElement.minSize、IElement.preferredSize、IElement.flexibleSize自动设置。如果元素的高度应根据可用空间的大小而变化，应开启此功能。在这种情况下不能直接设置每个元素的高度，但可以通过控制每个元素的IElement.minSize、IElement.preferredSize、IElement.flexibleSize来进行控制"
+    }) get controlSizeHeight() { return this._controlSizeHeight }
     public set controlSizeHeight(value: boolean) {
         if (value == this._controlSizeHeight) return
         this._controlSizeHeight = value
         this.emit(Event.ON_CHANGED_LAYOUT_STATE)
     }
     @property private _controlScaleWidth: boolean = false
-    @(property as any)({ group: { id: "0", name: "controlScale" } ,displayName:"控件宽度比例",tooltip:""}) get controlScaleWidth() { return this._controlScaleWidth }
+    @(property as any)({
+        group: { id: "0", name: "controlScale" },
+        tooltip: "是否使用 x 缩放计算宽度"
+    }) get controlScaleWidth() { return this._controlScaleWidth }
     public set controlScaleWidth(value: boolean) {
         if (value == this._controlScaleWidth) return
         this._controlScaleWidth = value
         this.emit(Event.ON_CHANGED_LAYOUT_STATE)
     }
     @property private _controlScaleHeight: boolean = false
-    @(property as any)({ group: { id: "0", name: "controlScale" },displayName:"控件高度比例",tooltip:"" }) get controlScaleHeight() { return this._controlScaleHeight }
+    @(property as any)({
+        group: { id: "0", name: "controlScale" },
+        tooltip: "是否使用 y 缩放计算高度"
+    }) get controlScaleHeight() { return this._controlScaleHeight }
     public set controlScaleHeight(value: boolean) {
         if (value == this._controlScaleHeight) return
         this._controlScaleHeight = value

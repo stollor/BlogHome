@@ -19,6 +19,7 @@ export abstract class View<T = any, A extends ScrollAdapter<T> = ScrollAdapter<T
     private _innerSize: number = 0
     private _group: Group<T, A> = null
     private _holderList: Holder<T, A>[] = []
+    private _tempHolderList: { holder: Holder, model: IModel<T>, isNew: boolean }[] = []
     private _isOverflowFixed: boolean
     public get isOverflowFixed() { return this._isOverflowFixed }
     public get adapter() { return this._adapter }
@@ -105,6 +106,7 @@ export abstract class View<T = any, A extends ScrollAdapter<T> = ScrollAdapter<T
         this._total = 0
         this._holderList.length = 0
         this._isOverflowFixed = true
+        this._tempHolderList.length = 0
         if (this.__debug_graphics) {
             this.__debug_graphics.clear()
         }
@@ -131,10 +133,19 @@ export abstract class View<T = any, A extends ScrollAdapter<T> = ScrollAdapter<T
         this._holderList.length = 0
     }
     /** @deprecated 内部方法，调用会爆炸💥 */
-    public internal_visible(group: Group<T, A>, findHolder?: (model: IModel<T>) => Holder<T, A>) {
+    public internal_preVisible(group: Group<T, A>, findHolder?: (model: IModel<T>) => Holder<T, A>) {
         this._group = group
-        this.register()
         this._createHolders(findHolder)
+        return this
+    }
+    /** @deprecated 内部方法，调用会爆炸💥 */
+    public internal_visible() {
+        this.register()
+        for (let i = 0; i < this._tempHolderList.length; i++) {
+            const { holder, model, isNew } = this._tempHolderList[i];
+            holder.internal_visible(this, model, isNew)
+        }
+        this._tempHolderList.length = 0
         this.adapter.layoutManager.layout(this.group)
         this.onVisible()
     }
@@ -189,6 +200,7 @@ export abstract class View<T = any, A extends ScrollAdapter<T> = ScrollAdapter<T
     }
     private _createHolders(findHolder?: (model: IModel<T>) => Holder<T, A>) {
         var mainAxis = this.adapter.mainAxis
+        this._tempHolderList.length = 0
         for (let i = 0; i < this.group.models.length; i++) {
             const model = this.group.models[i];
             var isNew = false
@@ -199,8 +211,8 @@ export abstract class View<T = any, A extends ScrollAdapter<T> = ScrollAdapter<T
             }
             // 处理开启了延迟布局时导致的当前帧position=0的情况 预先设置一个默认值
             model.position[mainAxis] = this.group.position[mainAxis]
-            holder.internal_visible(this, model, isNew)
             this._holderList.push(holder)
+            this._tempHolderList.push({ holder, model, isNew })
         }
     }
     private _calculateInnerSize(model: IModel<T>, group: Group<T>) {
