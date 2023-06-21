@@ -1,4 +1,4 @@
-import { _decorator, Color, Component, Node, Sprite } from 'cc';
+import { _decorator, Color, Component, Node, Sprite, UITransform } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('ClenderItem')
@@ -29,5 +29,9 @@ export class ClenderItem extends Component {
 			this.nInfo.active = false;
 			this.nOutSize.getComponent(Sprite).color = new Color('#ffffff');
 		}
+	}
+
+	setHeight(height: number) {
+		this.node.getComponent(UITransform).height = height;
 	}
 }

@@ -35,9 +35,10 @@ export class ClenderPanel extends Component {
 	@property(Node) item: Node;
 	@property(Node) scaleBtn: Node;
 
+	private _line: number = 0;
 	start() {
 		this.scrollView.prefabMap.set('item', this.item);
-		this.scrollView.modelManager.insert(this.getData(), this.itemInterData);
+		this.scrollView.modelManager.insert(this.getData(), this.itemInterData.bind(this));
 		this.scaleBtn.on(Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
 	}
 
@@ -46,6 +47,7 @@ export class ClenderPanel extends Component {
 		let delta = event.getUIDelta();
 		this.node.getComponent(UITransform).width += delta.x;
 		this.node.getComponent(UITransform).height -= delta.y;
+		//let itemHeight = this.node.getComponent(UITransform).height / this._line;
 	}
 
 	itemInterData(item) {
@@ -53,6 +55,7 @@ export class ClenderPanel extends Component {
 			prefab: 'item',
 			onShow: (holder) => {
 				holder.node.getComponent(ClenderItem).refresh(item);
+				holder.node.getComponent(ClenderItem).setHeight(this.node.getComponent(UITransform).height / this._line);
 			},
 			element: {
 				wrapAfterMode: item.week == 0 ? WrapMode.Wrap : WrapMode.Nowrap,
@@ -102,7 +105,7 @@ export class ClenderPanel extends Component {
 			};
 			res.push(info);
 		}
-
+		this._line = Math.ceil(res.length / 7);
 		return res;
 	}
 }

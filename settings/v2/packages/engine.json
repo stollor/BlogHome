@@ -71,13 +71,13 @@
         "_value": true
       },
       "occlusion-query": {
-        "_value": false
+        "_value": true
       },
       "geometry-renderer": {
-        "_value": false
+        "_value": true
       },
       "debug-renderer": {
-        "_value": false
+        "_value": true
       },
       "particle-2d": {
         "_value": true
@@ -128,11 +128,14 @@
       "animation",
       "audio",
       "base",
+      "debug-renderer",
       "dragon-bones",
+      "geometry-renderer",
       "gfx-webgl",
       "gfx-webgl2",
       "intersection-2d",
       "light-probe",
+      "occlusion-query",
       "particle-2d",
       "physics-2d-builtin",
       "physics-builtin",

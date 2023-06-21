@@ -1,5 +1,5 @@
 import { _decorator, Collider2D, Component, Contact2DType, IPhysics2DContact, Node } from 'cc';
-import { sortObjects } from '../../../tools/utils';
+import { sortObjects } from '../../../../models/utils/utils';
 import { Player } from './player';
 const { ccclass, property } = _decorator;
 

@@ -1,0 +1,17 @@
+{
+    "saveName": "font",
+    "bitMapCfg": [
+        {
+            "image": "E:\\stollor\\home\\assets\\resources\\lALPM5Hilrprfr7MkMyQ_144_144.png",
+            "char": "0",
+            "width": 144,
+            "height": 144
+        },
+        {
+            "image": "E:\\stollor\\home\\assets\\resources\\lALPM5VwFV81jIzMlHA_112_148.png",
+            "char": "l",
+            "width": 112,
+            "height": 148
+        }
+    ]
+}
