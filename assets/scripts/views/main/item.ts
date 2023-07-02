@@ -1,4 +1,6 @@
-import { _decorator, Button, CCString, Color, Component, director, Sprite } from 'cc';
+import { _decorator, Button, CCString, Color, Component, director, Sprite, Node } from 'cc';
+import { TweenUtil } from '../../../models/utils/tween';
+import { assetManager } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('item')
@@ -17,10 +19,22 @@ export class item extends Component {
 		this._colorSeedR = Math.random() * 180;
 		this._colorSeedG = Math.random() * 180;
 		this._colorSeedB = Math.random() * 180;
+		TweenUtil.showStyle1(this.node);
 	}
 
 	onButtonEvent() {
-		director.loadScene(this.sceneName);
+		switch (this.sceneName) {
+			case 'dieCell':
+				{
+					assetManager.loadBundle('realWorld', (err, bundle) => {
+						director.loadScene('realWorld');
+					});
+				}
+				break;
+			default: {
+				director.loadScene(this.sceneName);
+			}
+		}
 	}
 
 	update(dt: number) {

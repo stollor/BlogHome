@@ -1458,7 +1458,7 @@
     "_isAbsVerticalCenter": true,
     "_originalWidth": 610,
     "_originalHeight": 290,
-    "_alignMode": 2,
+    "_alignMode": 1,
     "_lockFlags": 0,
     "_id": "0a58be3C5E16+++PWe/b5o"
   },
@@ -1922,7 +1922,7 @@
     "_isAbsVerticalCenter": true,
     "_originalWidth": 100,
     "_originalHeight": 0,
-    "_alignMode": 2,
+    "_alignMode": 1,
     "_lockFlags": 0,
     "_id": "18gWDiihdH37Cg9MPNLqED"
   },
@@ -2478,7 +2478,7 @@
     "_isAbsVerticalCenter": true,
     "_originalWidth": 610,
     "_originalHeight": 290,
-    "_alignMode": 2,
+    "_alignMode": 1,
     "_lockFlags": 0,
     "_id": "bdsV3RIcRDz7KpQwz8G5PB"
   },
@@ -2986,7 +2986,7 @@
     "_isAbsVerticalCenter": true,
     "_originalWidth": 100,
     "_originalHeight": 0,
-    "_alignMode": 2,
+    "_alignMode": 1,
     "_lockFlags": 0,
     "_id": "d8Uwao01tEEbllptfFB4Zf"
   },
@@ -3542,7 +3542,7 @@
     "_isAbsVerticalCenter": true,
     "_originalWidth": 610,
     "_originalHeight": 290,
-    "_alignMode": 2,
+    "_alignMode": 1,
     "_lockFlags": 0,
     "_id": "54Q12xbB9M+oN0CT2qqEAG"
   },
@@ -4006,7 +4006,7 @@
     "_isAbsVerticalCenter": true,
     "_originalWidth": 100,
     "_originalHeight": 0,
-    "_alignMode": 2,
+    "_alignMode": 1,
     "_lockFlags": 0,
     "_id": "10j5cB9oZDIYfmgybvOckC"
   },
@@ -4562,7 +4562,7 @@
     "_isAbsVerticalCenter": true,
     "_originalWidth": 610,
     "_originalHeight": 290,
-    "_alignMode": 2,
+    "_alignMode": 1,
     "_lockFlags": 0,
     "_id": "fdUzEl3P5HCo9/iEPkL/7V"
   },
@@ -5070,7 +5070,7 @@
     "_isAbsVerticalCenter": true,
     "_originalWidth": 100,
     "_originalHeight": 0,
-    "_alignMode": 2,
+    "_alignMode": 1,
     "_lockFlags": 0,
     "_id": "0bvepA7ShDmrvB0sIWVPrO"
   },

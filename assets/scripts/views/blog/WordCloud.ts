@@ -1,5 +1,4 @@
 import { _decorator, CCBoolean, Color, Component, Graphics, Label, Layers, Node, UITransform, v3 } from 'cc';
-import { mapTo, sortObjects } from '../../../models/utils/utils';
 const { ccclass, property } = _decorator;
 
 let data = [
@@ -81,7 +80,7 @@ export class WordCloud extends Component {
 	}
 
 	refreshData(data) {
-		sortObjects(data, [(item) => item.value]);
+		ToolUtils.sortObjects(data, [(item) => item.value]);
 		let sum = 0;
 		data.forEach((item) => {
 			sum += item.value;
@@ -126,7 +125,7 @@ export class WordCloud extends Component {
 		//计算矩形大小
 		let width = item.name.length * 3 * (10 / this._unit);
 		let height = 4 * (10 / this._unit);
-		let scale = mapTo(value / this._sum, this._maxSize, this._rateChange) + this._minSize;
+		let scale = ToolUtils.mapTo(value / this._sum, this._maxSize, this._rateChange) + this._minSize;
 		scale *= this._unit / 10;
 		width = Math.floor(width * scale);
 		height = Math.floor(height * scale);

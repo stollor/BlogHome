@@ -1,5 +1,4 @@
 import { _decorator, Collider2D, Component, Contact2DType, IPhysics2DContact, Node } from 'cc';
-import { sortObjects } from '../../../../models/utils/utils';
 import { Player } from './player';
 const { ccclass, property } = _decorator;
 
@@ -29,7 +28,7 @@ export class Sensor extends Component {
 	}
 
 	protected update(dt: number): void {
-		sortObjects(this.objectList, [(item) => item.position.x, true], [(item) => item.position.y, true]);
+		ToolUtils.sortObjects(this.objectList, [(item) => item.position.x, true], [(item) => item.position.y, true]);
 		Player.instance.attack(this.objectList);
 	}
 }
