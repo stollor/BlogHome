@@ -1,6 +1,0 @@
-info face="face" size=148
-common lineHeight=148 scaleW=144 scaleH=294 pages=1
-page id=0 file="font.png"
-chars count=2
-char id=48 x=0 y=0 width=144 height=144 xoffset=0 yoffset=0 xadvance=144 page=0 chnl=15
-char id=108 x=0 y=146 width=112 height=148 xoffset=0 yoffset=0 xadvance=112 page=0 chnl=15

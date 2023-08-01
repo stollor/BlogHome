@@ -535,6 +535,10 @@
 
     }
 
+    .settingDesc{
+        color: gray;
+    }
+
     .setting {
         position: fixed;
         top: 0;
@@ -764,32 +768,32 @@
         <div class="gamePanel" :style="setting.gamePanelStyle">
             <div class="gamebtns">
                 <div class="gameBtnsLeft">
-                    <button @click="refresh" title="Refresh Game">
+                    <button @click="refresh" :title="useChinese?'刷新游戏':'Refresh Game'">
                         <span class="iconfont icon-shuaxin"></span>
                     </button>
                 </div>
                 <div class="gameBtnsRight">
-                    <button @click="playOrPause" title="Play|Pause Game">
+                    <button @click="playOrPause" :title="useChinese?'恢复/暂停游戏':'Play|Pause Game'">
                         <span :class="[pauseIcon]"></span>
                     </button>
-                    <button @click="toggleFps" title="Show|Hide FPS">
+                    <button @click="toggleFps" :title="useChinese?'显示隐藏FPS信息':'Show|Hide FPS'">
                         <span class="iconfont icon-zoushi"></span>
                     </button>
-                    <button @click="toggleSnd" title="Mute|Resume Sound">
+                    <button @click="toggleSnd" :title="useChinese?'静音/恢复':'Mute|Resume Sound'">
                         <span v-if="!isMuted" class="iconfont icon-sound-"></span>
                         <span v-if="isMuted" class="iconfont icon-sound-1"></span>
                     </button>
-                    <button @contextmenu.stop="toggle3dHover" @click="toggleHover" :style="hoverBtnStyle" title="find by Hover, left click for 2d | right click for 3d">
+                    <button @contextmenu.stop="toggle3dHover" @click="toggleHover" :style="hoverBtnStyle" :title="useChinese?'通过悬停方式定位节点, 左键2d，右键3d':'find by Hover, left click for 2d | right click for 3d'">
                         <span class="iconfont icon-aim1"></span>
                         <label style="position: absolute;top: -0.3em;right: -0.6em;font-size: smaller;">{{hoverMark}}</label>
                     </button>
-                    <button @click="toggleDesignMode" :style="designBtnStyle" title="toggle design mode">
+                    <button @click="toggleDesignMode" :style="designBtnStyle" :title="useChinese?'开关设计模式：可拖拽场景中的节点':'toggle design mode'">
                         <span class="iconfont icon-drag"></span>
                     </button>
-                    <button @click.stop="showResolutionSelector=!showResolutionSelector" title="adjust resolution and rotation" :style="resolutionBtnStyle">
+                    <button @click.stop="showResolutionSelector=!showResolutionSelector" :title="useChinese?'调整分辨率':'Adjust Resolution'" :style="resolutionBtnStyle">
                         <span class="iconfont icon-xuanzhuan"></span>
                     </button>
-                    <button v-if="!showDevToolInTab" @click="openWvDevTool" title="Open DevTool of Game Page">
+                    <button v-if="!showDevToolInTab" @click="openWvDevTool" :title="useChinese?'打开开发者工具':'Open DevTool of Game Page'">
                         <span class="iconfont icon-tools-hardware"></span>
                     </button>
                 </div>
@@ -816,25 +820,25 @@
                         <a v-show="showRefreshTreeBtn" @click="forceUpdateTree" class="iconfont icon-shuaxin"></a>
                     </div>
                     <div :class="{tabItem:true,selected:tab==1}" @click="tab=1">
-                        <span class="iconfont icon-terminal-box-line"></span>{{showDevToolInTab?"DevTool":"Console"}}
+                        <span class="iconfont icon-terminal-box-line"></span>{{showDevToolInTab?(useChinese?"开发者工具":"DevTool"):"Console"}}
                     </div>
                     <div :class="{tabItem:true,selected:tab==2}" @click="tab=2">
-                        <span class="iconfont icon-jiarehuoyan-xianxing"></span>Cocos
+                        <span class="iconfont icon-jiarehuoyan-xianxing"></span>{{useChinese?"Cocos信息":"Cocos"}}
                     </div>
                     <div :class="{tabItem:true,selected:tab==3}" @click="tab=3">
-                        <span class="iconfont icon-jiedian"></span>Extension
+                        <span class="iconfont icon-jiedian"></span>{{useChinese?"扩展":"Extension"}}
                     </div>
 
                 </div>
 
                 <div>
-                    <button @click="showHelp" title="Help">
+                    <button @click="showHelp" :title="useChinese?'帮助':'Help'">
                         <span class="iconfont icon-help"></span>
                     </button>
                     <!-- <button @click="location.reload()" title="Refresh Plugin">
                         <span class="iconfont icon-shuaxin"></span>
                     </button> -->
-                    <button @click="showSetting" title="Setting">
+                    <button @click="showSetting" :title="useChinese?'设置':'Setting'">
                         <span class="iconfont icon-shezhi"></span>
                     </button>
                 </div>
@@ -848,18 +852,23 @@
                             :key="sn.id"></node-view>
                     </div>
                 </div>
-                <div v-show="!nodeTree" style="font-size: 50px;text-align: center;margin: 100px auto auto;text-shadow: 3px 3px 4px #0000004a;">
+                <div v-show="!nodeTree" style="display:flex; flex-direction:column; font-size: 50px;text-align: center;margin-left:auto;margin-right:auto;padding-top:100px;text-shadow: 3px 3px 4px #0000004a;">
                     <div style="color: rgb(0 0 0 / 0%);background: linear-gradient(60deg, #36d1ff, #fafdff, #23b2ff, #ffff72);background-clip: text;-webkit-background-clip: text;">COCOS</div> 
                     <div style="color: rgb(0 0 0 / 0%);background: linear-gradient(60deg, #b3b3b38c, #fafdff, #656565, #b7b7b0);background-clip: text;-webkit-background-clip: text;">INSPECTOR</div>
                     
-                    <div style="font-size: 20px;margin-top: auto;color: rgb(31, 154, 255);">loading ...</div>
+                    <div style="font-size: 20px;margin-top: auto;color: rgb(31, 154, 255);">
+                        {{useChinese?"加载中...":"loading ..."}}
+                    </div>
+                    <spacer></spacer>
+                    <ad></ad>
+                    <!-- <div style="font-size: 12px;margin-top: auto;color: rgba(28, 150, 249, 0.579);">ad: 船神浏览器</div> -->
                     <!-- <div style="font-size: 0.5em;">loading...</div> -->
                 </div>
                 <div class="inspectPanel" v-if="nodeDetail">
                     <node-detail-view :detail="nodeDetail"></node-detail-view>
                     <node-component v-for="com in nodeDetail.coms" :com="com" :key="com"></node-component>
                 </div>
-                <search-panel></search-panel>
+                <search-panel v-show="nodeTree"></search-panel>
             </div>
             <webview v-show="tab==1 && showDevToolInTab" nodeintegrationinsubframes="true" webpreferences="contextIsolation=no" ref="devtools" src="about:blank"></webview>
             <console-panel v-if="!showDevToolInTab && tab==1"></console-panel>
@@ -877,76 +886,93 @@
                 <div class="settingHeader">
                     <span class="iconfont icon-shanchu" @click="close" style="font-size: 1.5em;"></span>
 
-                    <div class="settingTitle"><img src="icon.png"/> Setting</div>
+                    <div class="settingTitle"><img src="icon.png"/> {{useChinese ? "设置":"Setting"}}</div>
 
                 </div>
 
                 <!-- <hr> -->
                 <label>
-                    Log Count Under GameView:
+                    <input type="checkbox" @change="saveToStorage" v-model="useChinese" />
+                    {{useChinese ? "使用中文":"Use Chinese"}}
+                    <span class="settingDesc">
+                        {{useChinese ? "右键菜单的语言更改将在重新打开插件窗口后生效":"language changes of context menu, will available after reopen cocos inspector window"}}
+                    </span>
+                </label>
+                <label>
+                    {{useChinese ? "游戏视图下方日志数量：":"Log Count Under GameView:"}}
                     <input type="number" @change="saveToStorage" v-model="logCount" min="0" max="100" step="1" />
                 </label>
                 <label>
-                    Open Array if length <=:
+                    {{useChinese ? "打开数组，当长度小于或等于：":"Open Array if length <=:"}}
                     <input type="number" @change="saveToStorage" v-model.number="openArrayLimit" step="1" min="0" max="100"  />
+                </label>
+                <label>
+                    {{useChinese ? "Prefab节点的文字尺寸：":"Prefab Node Font Size: "}}
+                    <br>
+                    <div style="display: flex;">
+                        <input @change="saveToStorage" min="1" max="1.5" step="0.01" type="range" v-model.number="prefabFontSize" />{{prefabFontSize}}
+                    </div>
                 </label>
                 <hr>
                 <br>
                 <label>
-                    Url Parameters:
+                    {{useChinese ? "Url参数：":"Url Parameters:"}}
                     <!-- {{logCount}} -->
                     <br>
                     <textarea placeholder="example:?xxx=y&abc=d" @change="saveToStorage" v-model="urlParams"></textarea>
                 </label>
                 <label>
-                    Custom Url:
-                    <!-- {{logCount}} -->
+                    {{useChinese ? "自定义Url：":"Custom Url:"}}
+                    <span class="settingDesc">{{useChinese ? "可通过菜单[open Custom Page]打开：":"can open by menu:[open Custom Page]"}}</span>
                     <br>
                     <textarea placeholder="example:http://xxx.com" @change="saveToStorage"
                         v-model="customUrl"></textarea>
                 </label>
                 <label>
                     <input type="checkbox" @change="saveToStorage" v-model="retinaEnable" />
-                    Retina Enable
+                    {{useChinese ? "开启视网膜显示模式":"Retina Enable"}}
                 </label>
                 <label>
                     <input type="checkbox" @change="saveToStorage" v-model="autoUpdateTree" />
-                    Auto Update Node Tree
+                    {{useChinese ? "自动刷新节点树":"Auto Update Node Tree"}}
                 </label>
                 <label>
                     <input type="checkbox" @change="saveToStorage" v-model="syncNodeDetail" />
-                    Sync Node Detail
+                    {{useChinese ? "自动同步选中节点属性的变化":"Sync Node Detail"}}
                 </label>
                 <hr>
                 <br>
-                <b>Need Restart Inspector/CocosCreator After Change</b>
+                <b>
+                    {{useChinese ? "以下设置改变后需要重启插件或CocosCreator" : "Need Restart Inspector/CocosCreator After Change"}}
+                </b>
                 <label>
                     <input type="checkbox" @change="saveToStorage" v-model="disableWebSec" />
-                    Disable Web Security
+                    {{useChinese ? "禁用web安全":"Disable Web Security"}}
+                    <span class="settingDesc">{{useChinese ? "禁用后，游戏页面可跨域":"if disable, the page can cross domain"}}</span>
                 </label>
                 <label>
                     <input type="checkbox" @change="saveToStorage" v-model="showDevToolInTab" />
-                    Show DevTool In Tab
+                    {{useChinese ? "在标签栏中显示开发者工具":"Show DevTool In Tab"}}
                 </label>
                 <hr>
                 <br>
-                <b>FGUI Setting</b>
+                <b>{{useChinese ? "FGUI设置":"FGUI Setting"}}</b>
                 <label>
                     <input type="checkbox" @change="saveToStorage" v-model="displayAsFairyTree" />
-                    Display As Fairy Tree
+                    {{useChinese ? "以FariyGUI的设计图纸模式显示节点树":"Display As Fairy Tree"}}
                 </label>
                 <label>
                     <input type="checkbox" :disabled="!displayAsFairyTree" @change="saveToStorage"
                         v-model="hideFairyComContainer" />
-                    Hide Fairy Component Container
+                        {{useChinese ? "隐藏Fgui组件的Container节点层级": "Hide Fairy Component Container"}}
                 </label>
 
                 <hr>
                 <br>
-                <div v-once>Feedback: <a @click="remote.shell.openExternal('https://forum.cocos.org/t/topic/116855')"
+                <div>{{useChinese ? "反馈建议：": "Feedback: "}}<a @click="remote.shell.openExternal('https://forum.cocos.org/t/topic/116855')"
                         target="_blank">https://forum.cocos.org/t/topic/116855</a></div>
                 <br>
-                <div v-once>Check New Version: <a
+                <div>{{useChinese ? "查看新版本：": "Check New Version: "}}<a
                         @click="remote.shell.openExternal('https://store.cocos.com/app/detail/2940')"
                         target="_blank">https://store.cocos.com/app/detail/2940</a></div>
                 <hr>
@@ -955,28 +981,28 @@
                 <!-- <br> -->
                 <div class="about">
                     <div class="settingHeader">
-                        <div class="settingTitle">About </div>
+                        <div class="settingTitle">{{useChinese ? "关于": "About"}} </div>
                     </div>
                     <!-- <hr> -->
                     <div>
-                        <span class="nodePropertyTitle">Author: </span>
+                        <span class="nodePropertyTitle">{{useChinese ? "作者：": "Author:"}}</span>
                         chuan.z
                     </div>
                     <div>
-                        <span class="nodePropertyTitle">Contact: </span>
+                        <span class="nodePropertyTitle">{{useChinese ? "联系方式：": "Contact:" }}</span>
                         <a @click="remote.shell.openExternal('mailto:bytetalking@qq.com')">bytetalking@qq.com</a>
                     </div>
                     <div>
-                        <span class="nodePropertyTitle">WebSite: </span>
+                        <span class="nodePropertyTitle">{{useChinese ? "网站：": "WebSite:"}} </span>
                         <a @click="remote.shell.openExternal('https://bytetalking.com')">https://bytetalking.com</a>
                     </div>
                     <hr>
                     <div>
-                        <span class="nodePropertyTitle">WeChat Offical Account: </span>
+                        <span class="nodePropertyTitle">{{useChinese ? "订阅号：": "WeChat Offical Account: "}}</span>
                         ByteTalking
                     </div>
                     <div>
-                        <span class="nodePropertyTitle">QRCode: </span>
+                        <span class="nodePropertyTitle">{{useChinese ? "二维码：": "QRCode: "}}</span>
                         <img src="wechatOC.jpeg" style="max-width: 150px;max-height: 150px;">
                     </div>
                 </div>

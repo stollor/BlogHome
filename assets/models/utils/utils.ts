@@ -1,4 +1,4 @@
-class ToolUtils {
+export class ToolUtils {
 	//object 多重排序
 	static sortObjects(obj: any, ...props: any[]) {
 		props = props.map((prop) => {
@@ -63,5 +63,81 @@ class ToolUtils {
 			let j = Math.floor(Math.random() * (list.length - i)) + i;
 			[list[i], list[j]] = [list[j], list[i]];
 		}
+	}
+
+	/**
+	 *
+	 * @param func
+	 * @returns
+	 */
+	static cloneFunction(func) {
+		const cloneFunc = function () {
+			return func.apply(this, arguments);
+		};
+		Object.getOwnPropertyNames(func).forEach(function (key) {
+			const desc = Object.getOwnPropertyDescriptor(func, key);
+			Object.defineProperty(cloneFunc, key, desc);
+		});
+		Object.setPrototypeOf(cloneFunc, Object.getPrototypeOf(func));
+		return cloneFunc;
+	}
+
+	/**
+	 *
+	 * @param obj
+	 * @param hash
+	 * @returns
+	 */
+	static deepClone<T extends object>(obj: T, hash = new WeakMap()): T {
+		// 返回基础类型
+		if (Object(obj) !== obj) {
+			return obj;
+		}
+
+		// 处理日期对象
+		if (obj instanceof Date) {
+			return new Date(obj) as T;
+		}
+
+		// 处理正则对象
+		if (obj instanceof RegExp) {
+			return new RegExp(obj) as T;
+		}
+
+		// 处理数组
+		if (obj instanceof Array) {
+			return obj.map((item) => ToolUtils.deepClone(item)) as T;
+		}
+
+		// 解决循环引用
+		if (hash.has(obj)) {
+			return hash.get(obj); // 解决循环引用
+		}
+
+		//处理函数
+		if (obj instanceof Function) {
+			return ToolUtils.cloneFunction(obj) as T;
+		}
+
+		// 处理普通对象和类实例
+		const result: any = Object.getPrototypeOf(obj) === Object.prototype ? {} : Object.create(obj.constructor.prototype);
+		hash.set(obj, result);
+
+		for (let key in obj) {
+			if (Object.prototype.hasOwnProperty.call(obj, key)) {
+				result[key] = ToolUtils.deepClone(obj[key] as any, hash);
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * 判断是否是类实例,可以区别简单的object和类实例
+	 * @param obj
+	 * @returns
+	 */
+	static isClassInstance(obj: any): boolean {
+		return obj !== null && typeof obj === 'object' && obj.constructor !== Object && Object.getPrototypeOf(obj) !== Object.prototype;
 	}
 }

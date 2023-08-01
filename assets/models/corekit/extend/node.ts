@@ -30,9 +30,12 @@ Node.prototype.setStr = function (str: string | number) {
 
 Node.prototype.setImg = function (frame: SpriteFrame) {
 	let comp = this.getComponent(Sprite);
-	if (!comp || !frame) return;
+	if (!comp || !frame) {
+		console.error(`setImg error:${this.name}`);
+		return;
+	}
 	comp.spriteFrame = frame;
-	this.addAutoReleaseAsset(frame);
+	comp.markAsset(frame);
 };
 
 Node.prototype.bindData = function (data: Data) {

@@ -2,8 +2,8 @@
   "__version__": "1.0.4",
   "general": {
     "designResolution": {
-      "width": 720,
-      "height": 1280,
+      "width": 1920,
+      "height": 1080,
       "fitWidth": false,
       "fitHeight": true
     }
@@ -48,6 +48,9 @@
       "4": 8,
       "5": 8,
       "6": 64
+    },
+    "gravity": {
+      "y": -100
     }
   },
   "layer": [

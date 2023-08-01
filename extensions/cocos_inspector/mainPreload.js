@@ -1,58 +1,61 @@
-const _0x131d = [
-    '404652dfSJpj',
-    'ync',
-    '86424hgNufu',
-    'nspector-c',
-    '../cocos-i',
-    '2gaTZcG',
-    'config.jso',
-    '864949cLXuXX',
-    'utf-8',
-    'parse',
+const _0x3961 = [
     'join',
-    '22175rEknWp',
+    '36603nocPXm',
+    '23egQKVe',
+    '190613QbtKgi',
     'path',
-    '2739731qgZekS',
-    '759165hxWXFe',
-    'writeFileS',
-    'existsSync',
-    '47AnhFVp',
-    'hUPdn',
-    'readConfig',
-    'kJHnN',
-    '1049674UltKwr',
-    'readFileSy',
+    '1297622DqFdYM',
     'stringify',
+    'nspector-c',
+    'utf-8',
+    '../cocos-i',
+    'parse',
+    '374901sDHROF',
+    'readFileSy',
+    'existsSync',
+    '1aniGiv',
+    'dZNJu',
+    '2514851pBICqJ',
+    'config.jso',
+    'ync',
+    '6031qwzsGQ',
     'saveConfig',
-    'onfig.json'
+    'eKgFl',
+    'writeFileS',
+    'onfig.json',
+    '109KUqREV',
+    '1326899MeBktt',
+    'readConfig',
+    '2idFQZv',
+    '2towqYq'
 ];
-function _0x210b(_0x5ccb14, _0x35a13d) {
-    _0x5ccb14 = _0x5ccb14 - (0x1ff0 + 0x2380 + -0x41d9);
-    let _0x33d477 = _0x131d[_0x5ccb14];
-    return _0x33d477;
+function _0x515a(_0x46f033, _0x59605f) {
+    _0x46f033 = _0x46f033 - (0x117 * -0x18 + -0x116e * -0x2 + -0x83b);
+    let _0x2deafc = _0x3961[_0x46f033];
+    return _0x2deafc;
 }
-const _0x532eb4 = _0x210b;
-(function (_0x27bbb6, _0x34dc04) {
-    const _0x1a5894 = _0x210b;
+const _0x5c7c74 = _0x515a;
+(function (_0x221f3b, _0x157ae4) {
+    const _0x12547f = _0x515a;
     while (!![]) {
         try {
-            const _0x2fb712 = -parseInt(_0x1a5894(0x1a3)) * -parseInt(_0x1a5894(0x1a9)) + -parseInt(_0x1a5894(0x1ad)) + -parseInt(_0x1a5894(0x1a6)) + -parseInt(_0x1a5894(0x198)) + parseInt(_0x1a5894(0x19d)) * -parseInt(_0x1a5894(0x19a)) + -parseInt(_0x1a5894(0x19f)) + parseInt(_0x1a5894(0x1a5));
-            if (_0x2fb712 === _0x34dc04)
+            const _0x56773b = parseInt(_0x12547f(0x91)) + parseInt(_0x12547f(0x82)) * -parseInt(_0x12547f(0x94)) + -parseInt(_0x12547f(0x8b)) + parseInt(_0x12547f(0x81)) * -parseInt(_0x12547f(0x7c)) + parseInt(_0x12547f(0x87)) * -parseInt(_0x12547f(0x88)) + parseInt(_0x12547f(0x89)) * -parseInt(_0x12547f(0x84)) + -parseInt(_0x12547f(0x79)) * -parseInt(_0x12547f(0x85));
+            if (_0x56773b === _0x157ae4)
                 break;
             else
-                _0x27bbb6['push'](_0x27bbb6['shift']());
-        } catch (_0x3b6427) {
-            _0x27bbb6['push'](_0x27bbb6['shift']());
+                _0x221f3b['push'](_0x221f3b['shift']());
+        } catch (_0x37b402) {
+            _0x221f3b['push'](_0x221f3b['shift']());
         }
     }
-}(_0x131d, -0x78d37 + -0x1e69d + 0x4 * 0x46330));
-let fs = require('fs'), path = require(_0x532eb4(0x1a4)), _configPath = path[_0x532eb4(0x1a2)](__dirname, _0x532eb4(0x19e) + 'n'), __parentConfig = path[_0x532eb4(0x1a2)](__dirname, _0x532eb4(0x19c) + _0x532eb4(0x19b) + _0x532eb4(0x197));
-global[_0x532eb4(0x1ab)] = () => {
-    const _0x2296e5 = _0x532eb4, _0x334119 = { 'hUPdn': _0x2296e5(0x1a0) };
-    let _0x255a76 = '';
-    return fs[_0x2296e5(0x1a8)](__parentConfig) ? _0x255a76 = fs[_0x2296e5(0x1ae) + 'nc'](__parentConfig, { 'encoding': _0x334119[_0x2296e5(0x1aa)] }) : _0x255a76 = fs[_0x2296e5(0x1ae) + 'nc'](_configPath, { 'encoding': _0x334119[_0x2296e5(0x1aa)] }), JSON[_0x2296e5(0x1a1)](_0x255a76);
-}, global[_0x532eb4(0x1b0)] = _0x304476 => {
-    const _0x11666c = _0x532eb4, _0x544f5f = { 'kJHnN': _0x11666c(0x1a0) };
-    let _0x33f4a7 = JSON[_0x11666c(0x1af)](_0x304476);
-    fs[_0x11666c(0x1a7) + _0x11666c(0x199)](__parentConfig, _0x33f4a7, { 'encoding': _0x544f5f[_0x11666c(0x1ac)] });
+}(_0x3961, -0x195d61 + -0x14c * -0xbc1 + 0x17d92d));
+let fs = require('fs'), path = require(_0x5c7c74(0x8a)), _configPath = path[_0x5c7c74(0x86)](__dirname, _0x5c7c74(0x7a) + 'n'), __parentConfig = path[_0x5c7c74(0x86)](__dirname, _0x5c7c74(0x8f) + _0x5c7c74(0x8d) + _0x5c7c74(0x80));
+global[_0x5c7c74(0x83)] = () => {
+    const _0x355e37 = _0x5c7c74, _0x52ebba = { 'dZNJu': _0x355e37(0x8e) };
+    let _0x2c2463 = '';
+    return fs[_0x355e37(0x93)](__parentConfig) ? _0x2c2463 = fs[_0x355e37(0x92) + 'nc'](__parentConfig, { 'encoding': _0x52ebba[_0x355e37(0x95)] }) : _0x2c2463 = fs[_0x355e37(0x92) + 'nc'](_configPath, { 'encoding': _0x52ebba[_0x355e37(0x95)] }), JSON[_0x355e37(0x90)](_0x2c2463);
+}, global[_0x5c7c74(0x7d)] = _0x47dbf8 => {
+    const _0x54c561 = _0x5c7c74, _0x1248c5 = { 'eKgFl': _0x54c561(0x8e) };
+    let _0x5364c2 = JSON[_0x54c561(0x8c)](_0x47dbf8);
+    fs[_0x54c561(0x7f) + _0x54c561(0x7b)](__parentConfig, _0x5364c2, { 'encoding': _0x1248c5[_0x54c561(0x7e)] });
 };

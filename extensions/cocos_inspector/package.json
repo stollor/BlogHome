@@ -1,11 +1,14 @@
 {
   "name": "cocos_inspector",
-  "version": "1.2.8",
+  "version": "1.3.7",
   "package_version":2,
   "description": "Cocos Runtime Inspector for cocos creator3.x",
   "author": "chuan.zhang",
   "main": "./main.js",
   "contributions":{
+    "scene": {
+      "script": "./scene-script.js"
+    },
     "menu":[
       {
         "path":"i18n:menu.extension/Cocos Inspector",
