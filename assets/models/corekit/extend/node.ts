@@ -13,6 +13,7 @@ declare module 'cc' {
 		//oparity:number;
 		oparity: number;
 		ui: UITransform;
+		zIndex: number;
 		bindData: (data: Data) => void;
 		move: (x: number, y: number) => void;
 		moveAnchorTo: (x: number, y: number) => void;
@@ -84,6 +85,37 @@ Object.defineProperty(Node.prototype, 'ui', {
 	enumerable: false,
 	get() {
 		return this.getComponent(UITransform);
+	},
+});
+
+Object.defineProperty(Node.prototype, 'zIndex', {
+	configurable: true,
+	enumerable: false,
+	get() {
+		if (this['_zIndex'] === undefined) {
+			if (this.getSiblingIndex() == 0) {
+				this['_zIndex'] = 0;
+			} else {
+				this['_zIndex'] = this.parent.children[this.getSiblingIndex() - 1].zIndex + 1;
+			}
+			return this['_zIndex'];
+		} else {
+			return this['_zIndex'];
+		}
+	},
+	set(value: number) {
+		this['_zIndex'] = value;
+		let siblingIndex = 0;
+		for (let i = 0; i < this.parent.children.length; i++) {
+			let item = this.parent.children[i];
+			if (item == this) continue;
+			if (item.zIndex <= value) {
+				siblingIndex = item.getSiblingIndex();
+			} else {
+				break;
+			}
+		}
+		this.setSiblingIndex(siblingIndex);
 	},
 });
 
