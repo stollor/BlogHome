@@ -6,7 +6,8 @@ export function catchAsync(msg: string) {
 			try {
 				return await originalMethod.apply(this, args);
 			} catch (error) {
-				console.error(`${msg}异常. ${propertyKey}:${error} `);
+				console.error(`${msg}异常.${args}, ${propertyKey}:${error} `);
+				originalMethod.catch(error);
 			}
 		};
 		return descriptor;

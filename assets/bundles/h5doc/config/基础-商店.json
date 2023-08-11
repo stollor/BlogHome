@@ -1,0 +1,65 @@
+{
+    "info":"目前完成了随即商店\n ",
+    "interface":[
+        {
+            "name":"名称",
+            "url":"接口",
+            "param":"参数",
+            "return":"返回值",
+            "desc":"备注"
+        },
+        {
+            "name":"获取商店信息",
+            "url":"/game/fixshop/get",
+            "param":"无",
+            "return":"无.同步fix_shop数据",
+            "desc":"目前不需要,登陆后商店信息已经有了"
+        },
+        {
+            "name":"购买商店",
+            "url":"/game/fixshop/buy",
+            "param":"{id:number}",
+            "return":"",
+            "desc":""
+        },
+        {
+            "name":"刷新商店",
+            "url":"/game/fixshop/refresh",
+            "param":"无",
+            "return":"无.同步fix_shop数据",
+            "desc":"玩家手动刷新商店"
+        },
+        {
+            "name":"使用碎片(合成)",
+            "url":"/game/role/frag/comb",
+            "param":"{id:number}",
+            "return":"null",
+            "desc":"批量合成时只能合成同一种(type)的碎片"
+        }
+
+    ],
+    "database":[
+        {
+            "name":"字段",
+            "type":"类型",
+            "desc":"备注"
+        },
+        {
+            "name":"role.fix_shop_times",
+            "type":"{商店key:免费刷新次数}",
+            "desc":"杂货商店 允许免费刷新次数"
+        },  {
+            "name":"role.fix_shop_refresh",
+            "type":"{商店key:时间戳}",
+            "desc":"杂货商店 最近恢复时间"
+        },  {
+            "name":"daily_record.fix_shop_refresh_times",
+            "type":"{商店key:刷新次数}",
+            "desc":"杂货商店 商店付费刷新过的次数"
+        },  {
+            "name":"role.fix_shop_times",
+            "type":"{商店key:免费刷新次数}",
+            "desc":"杂货商店 允许免费刷新次数"
+        }
+    ]
+}

@@ -1,0 +1,65 @@
+{
+    "info":"目前完成了卡牌icon的列表显示\n",
+    "database":[
+        {
+            "name":"字段",
+            "type":"类型",
+            "desc":"备注"
+        },
+        {
+            "name":"role.cards",
+            "type":"[id]",
+            "desc":"获取卡牌的唯一id列表"
+        },
+        {
+            "name":"cards",
+            "type":"GameModelBase",
+            "desc":"通过GameApp.Model.cards.get(id)获取卡牌数据,卡牌数据为前端定义的GameModelBase类型"
+        }
+    ],
+    "param":[
+        {
+            "name":"卡牌相关配表",
+            "desc":"",
+            "param":[
+                {
+                    "name":"unit",
+                    "desc":"卡牌配表,包含卡牌的属性,图标等信息"
+                }
+            ]
+        },
+
+        {
+        "name":"GameModelBase",
+        "desc":"卡牌数据结构",
+        "param":[
+            {
+                "name":"unit_id",
+                "desc":"unit配表中的id,可以获取 卡牌的固定属性如 属性,图标"
+            },
+            {
+                "name":"star",
+                "desc":"卡牌星级"
+            },
+            {
+                "name":"level",
+                "desc":"卡牌等级"
+            }
+        ]
+    },{
+        "name":"unit",
+        "desc":"卡牌配表",
+        "param":[
+            {
+                "name":"icon",
+                "desc":"icon的图片路径"
+            },
+            {
+                "name":"natureType",
+                "desc":"卡牌的属性(海,陆,炎,光,暗)"
+            }
+
+        ]
+    }]
+
+}

@@ -11,17 +11,22 @@ class BaseEvent {
 		this.callback = callback;
 	}
 }
+
+declare global {
+	var em: EventManager;
+}
+
 /**
  * 全局事件管理
  */
-export class EventMgr {
+class EventManager {
 	private _eventList: {} = {};
 	private _eventMap: {} = {};
 
-	private static _instance: EventMgr = null;
-	static get instance(): EventMgr {
-		return EventMgr._instance || (EventMgr._instance = new EventMgr());
-	}
+	public static instance: EventManager = null;
+	// static get instance(): EventMgr {
+	// 	return EventMgr._instance || (EventMgr._instance = new EventMgr());
+	// }
 
 	public getKey(list: any[], start, end) {
 		let key = '';
@@ -107,3 +112,6 @@ export class EventMgr {
 		this._eventList[type] = null;
 	}
 }
+
+const eventManager: EventManager = (EventManager.instance = new EventManager());
+globalThis.em = eventManager;

@@ -1,8 +1,21 @@
 import { AssetManager, assetManager } from 'cc';
 import { catchAsync, catchError } from '../decorater/function';
 
+/**
+ * bundle管理器
+ * @description 用于管理bundle的加载和释放
+ * @example
+ * ```ts
+ * // 加载bundle
+ * await assetsMgr.bundleMgr.loadBundle('h5doc');
+ * // 获取bundle
+ * let bundle = await assetsMgr.bundleMgr.getBundle('h5doc');
+ * // 移除bundle
+ * assetsMgr.bundleMgr.removeBundle('h5doc');
+ * ```
+ */
 export class BundleMgr {
-	private _lock: Map<string, boolean>;
+	private _lock: Map<string, Promise<AssetManager.Bundle>>;
 
 	constructor() {
 		this._lock = new Map();
@@ -28,17 +41,18 @@ export class BundleMgr {
 	@catchAsync('加载bundle')
 	public async loadBundle(name: string): Promise<AssetManager.Bundle> {
 		if (this._lock.get(name)) {
-			return Promise.reject(`bundle ${name} 正在加载中`);
+			console.error(`bundle ${name} 正在加载中`);
+			return this._lock.get(name);
 		}
-		this._lock.set(name, true);
-		const bundle = await new Promise<AssetManager.Bundle>((resolve, reject) => {
+		const promise = new Promise<AssetManager.Bundle>((resolve, reject) => {
 			assetManager.loadBundle(name, (err, bundle) => {
+				this._lock.delete(name);
 				if (err) reject(err);
 				else resolve(bundle);
 			});
 		});
-		this._lock.delete(name);
-		return bundle;
+		this._lock.set(name, promise);
+		return promise;
 	}
 
 	/**
@@ -50,10 +64,14 @@ export class BundleMgr {
 		let bundle = assetManager.getBundle(name);
 		if (bundle) {
 			bundle.releaseAll();
-			this._lock.set(name, false);
+			this._lock.delete(name);
 			assetManager.removeBundle(bundle);
-			return false;
+			return true;
 		}
-		return true;
+		return false;
+	}
+
+	public load(name, callback) {
+		assetManager.loadBundle(name, callback);
 	}
 }

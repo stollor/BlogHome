@@ -1,11 +1,10 @@
-import { _decorator, assetManager, Component, director, Label } from 'cc';
-import { assetsMgr } from '../models/corekit';
-import { ToolUtils } from '../models/utils/utils';
+import { _decorator, assetManager, CCString, Component, director, JsonAsset, Label } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('Start')
 export class Start extends Component {
 	@property(Label) lbProgress: Label;
+	@property(CCString) bundleName: string = 'h5doc';
 
 	start() {}
 
@@ -22,26 +21,26 @@ export class Start extends Component {
 
 	async loadAsset() {
 		this.lbProgress.string = '0%';
-		await assetsMgr.bundleMgr.loadBundle('utils');
-		this.loadCB();
+		let jsonAsset = await assetsMgr.load('bundleConfig', JsonAsset, this.bundleName);
+		let list = jsonAsset.json.models;
+		let startScene = jsonAsset.json.start;
+		for (let i = 0; i < list.length; i++) {
+			let bundle = await assetsMgr.bundleMgr.loadBundle(list[i]);
+			this.lbProgress.string = `${Math.floor((i / list.length) * 100)}%`;
+		}
+		this.loadCB(startScene);
 	}
 
-	async loadCB() {
+	async loadCB(startScene) {
 		this.lbProgress.string = '100%';
-		this.test();
-		//this.switchBundle('dc');
+		this.switchBundle(startScene);
 	}
 
-	async switchBundle(name: string) {
-		assetsMgr.defaultBundleName = name;
-		let bundle = await assetsMgr.bundleMgr.loadBundle(name);
-		bundle.loadScene(`${name}`, function (err, scene) {
+	async switchBundle(startScene) {
+		assetsMgr.defaultBundleName = this.bundleName;
+		let bundle = await assetsMgr.bundleMgr.getBundle(this.bundleName);
+		bundle.loadScene(`${startScene}`, function (err, scene) {
 			director.runScene(scene);
 		});
-	}
-
-	test() {
-		console.log(assetsMgr);
-		console.log(ToolUtils.deepClone(assetsMgr));
 	}
 }

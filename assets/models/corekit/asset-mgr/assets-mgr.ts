@@ -2,6 +2,10 @@ import { Asset } from 'cc';
 import { catchAsync } from '../decorater/function';
 import { BundleMgr } from './bundle-mgr';
 
+declare global {
+	var assetsMgr: AssetsMgr;
+}
+
 export class AssetsMgr {
 	declare static instance: AssetsMgr;
 	private _bundleMgr: BundleMgr;
@@ -23,7 +27,7 @@ export class AssetsMgr {
 		const bundle = await this._bundleMgr.getBundle(bundleName);
 		const asset = await new Promise<InstanceType<T>>((resolve, reject) => {
 			bundle.load(url, type, (err: any, asset: InstanceType<T>) => {
-				if (err) throw reject(err);
+				if (err) reject(err);
 				else resolve(asset as InstanceType<T>);
 			});
 		});
@@ -31,4 +35,5 @@ export class AssetsMgr {
 	}
 }
 
-export const assetsMgr: AssetsMgr = (AssetsMgr.instance = new AssetsMgr());
+const assetsMgr: AssetsMgr = (AssetsMgr.instance = new AssetsMgr());
+globalThis.assetsMgr = assetsMgr;
