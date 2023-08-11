@@ -23,13 +23,19 @@ export class item extends Component {
 
 	onButtonEvent() {
 		switch (this.sceneName) {
-			case 'dieCell':
-				{
-					assetManager.loadBundle('realWorld', (err, bundle) => {
-						director.loadScene('realWorld');
-					});
-				}
+			case 'dieCell': {
+				assetManager.loadBundle('realWorld', (err, bundle) => {
+					director.loadScene('realWorld');
+				});
 				break;
+			}
+
+			case 'h5doc': {
+				assetManager.loadBundle('h5doc', function (err, bundle) {
+					bundle.loadScene('main', (err, sceneAsset) => director.runScene(sceneAsset));
+				});
+				break;
+			}
 			default: {
 				director.loadScene(this.sceneName);
 			}
