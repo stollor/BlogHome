@@ -1,9 +1,9 @@
 import { _decorator, Component, log, Node, sp } from 'cc';
 const { ccclass, property } = _decorator;
 
-@ccclass('CSpineUtil')
-export class CSpineUtil extends Component {
-	public static getSpineComponent(obj: sp.Skeleton | Node) {
+@ccclass('SpineUtil')
+export class SpineUtil extends Component {
+	public getSpineComponent(obj: sp.Skeleton | Node) {
 		if (!obj) return;
 		var spine: sp.Skeleton = null;
 		if (obj instanceof sp.Skeleton) {
@@ -21,7 +21,7 @@ export class CSpineUtil extends Component {
 	 * @param name  皮肤名称
 	 * @returns
 	 */
-	public static findSkin(obj: sp.Skeleton | Node, name: string): boolean {
+	public findSkin(obj: sp.Skeleton | Node, name: string): boolean {
 		var spine = this.getSpineComponent(obj);
 		if (!spine) return false;
 		spine.node.active = true;
@@ -44,7 +44,7 @@ export class CSpineUtil extends Component {
 	 * @param data  数据
 	 * @returns
 	 */
-	public static setData(obj: sp.Skeleton | Node, data: sp.SkeletonData) {
+	public setData(obj: sp.Skeleton | Node, data: sp.SkeletonData) {
 		var spine = this.getSpineComponent(obj);
 		if (!spine) return false;
 		spine.node.active = false;
@@ -58,7 +58,7 @@ export class CSpineUtil extends Component {
 	 * @param path 资源路径
 	 * @param cb
 	 */
-	public static setDataRes(obj: sp.Skeleton | Node, path: string, cb: Function) {
+	public setDataRes(obj: sp.Skeleton | Node, path: string, cb: Function) {
 		globalThis.gameManager.resMgr.loadSpineData(path, (e, p) => {
 			this.setData(obj, p);
 			cb && cb(obj);
@@ -70,7 +70,7 @@ export class CSpineUtil extends Component {
 	 * @param obj spine组件
 	 * @param name  皮肤名
 	 */
-	public static setSkine(obj: sp.Skeleton | Node, name: string) {
+	public setSkine(obj: sp.Skeleton | Node, name: string) {
 		var spine = this.getSpineComponent(obj);
 		spine.node.active = true;
 		if (this.findSkin(obj, name)) {
@@ -90,7 +90,7 @@ export class CSpineUtil extends Component {
 	 * @param ifLoop 是否循环
 	 * @returns
 	 */
-	public static playSpine(
+	public playSpine(
 		node: sp.Skeleton | Node,
 		aniName: string,
 		timeScale: number,
@@ -123,7 +123,7 @@ export class CSpineUtil extends Component {
 	 * @param ifLoop 是否循环
 	 * @returns
 	 */
-	public static playSpineLimimt(
+	public playSpineLimimt(
 		node: Node,
 		aniName: string,
 		timeScale: number,
@@ -155,7 +155,7 @@ export class CSpineUtil extends Component {
 	 * @param from
 	 * @param end
 	 */
-	public static limitSpineFrame(spine: sp.Skeleton, index: number, from: number, end: number) {
+	public limitSpineFrame(spine: sp.Skeleton, index: number, from: number, end: number) {
 		var frameRate = 30; //默认帧率
 		var secondsPerFrame = 1 / frameRate;
 		var beginTime = from * secondsPerFrame;
@@ -170,7 +170,7 @@ export class CSpineUtil extends Component {
 	 * @param name  挂点对应的骨骼名称
 	 * @param node  挂点
 	 */
-	public static addSocket(spine: sp.Skeleton, name: string, node: Node) {
+	public addSocket(spine: sp.Skeleton, name: string, node: Node) {
 		var bone = spine.findBone(name);
 		if (!bone) return;
 		var path = bone.data.name;
@@ -190,7 +190,7 @@ export class CSpineUtil extends Component {
 	}
 
 	/**获取动画时长 */
-	public static getAniTime(spine: sp.Skeleton, name: string) {
+	public getAniTime(spine: sp.Skeleton, name: string) {
 		//@ts-ignore
 		return spine?.skeletonData?._skeletonCache?.animations?.filter((item) => item.name == name)?.[0]?.duration;
 	}

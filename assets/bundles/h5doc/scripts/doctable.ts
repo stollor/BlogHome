@@ -8,11 +8,11 @@ export class doctable extends Component {
 	@property(Node) nodeItemTypeParent: Node;
 
 	start() {
-		em.on('TableItem-onClick', this.onItemClick, this);
+		models.em.on('TableItem-onClick', this.onItemClick, this);
 	}
 
 	onItemClick(msg: string) {
-		assetsMgr.load('config/' + msg, JsonAsset).then(
+		models.assetMgr.load('config/' + msg, JsonAsset).then(
 			(jsonAsset: JsonAsset) => {
 				this.refresh(jsonAsset.json);
 			},

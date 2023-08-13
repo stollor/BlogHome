@@ -1,5 +1,4 @@
 import { _decorator, CCInteger, Component, DynamicAtlasManager, instantiate, macro, Node, SpriteFrame } from 'cc';
-import { assetsMgr } from '../../../models/corekit';
 const { ccclass, property } = _decorator;
 
 @ccclass('ListIcons')
@@ -16,7 +15,7 @@ export class ListIcons extends Component {
 		this.content.destroyAllChildren();
 		for (let i = 0; i < this.itemNumber; i++) {
 			let item = instantiate(this.item);
-			assetsMgr.load(`list-icons/icons/水晶 (${(i % 59) + 1})/spriteFrame`, SpriteFrame).then((sprite) => {
+			models.assetMgr.load(`list-icons/icons/水晶 (${(i % 59) + 1})/spriteFrame`, SpriteFrame).then((sprite) => {
 				item.children[0].setImg(sprite);
 				//item.getComponentInChildren(Sprite).spriteFrame = sprite;
 			});

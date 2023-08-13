@@ -21,11 +21,13 @@ export class Start extends Component {
 
 	async loadAsset() {
 		this.lbProgress.string = '0%';
-		let jsonAsset = await assetsMgr.load('bundleConfig', JsonAsset, this.bundleName);
+		// 添加短暂延迟等待浏览器发送预检请求
+		await new Promise((resolve) => setTimeout(resolve, 100));
+		let jsonAsset = await models.assetMgr.load('bundleConfig', JsonAsset, this.bundleName);
 		let list = jsonAsset.json.models;
 		let startScene = jsonAsset.json.start;
 		for (let i = 0; i < list.length; i++) {
-			let bundle = await assetsMgr.bundleMgr.loadBundle(list[i]);
+			let bundle = await models.assetMgr.bundleMgr.loadBundle(list[i]);
 			this.lbProgress.string = `${Math.floor((i / list.length) * 100)}%`;
 		}
 		this.loadCB(startScene);
@@ -37,8 +39,8 @@ export class Start extends Component {
 	}
 
 	async switchBundle(startScene) {
-		assetsMgr.defaultBundleName = this.bundleName;
-		let bundle = await assetsMgr.bundleMgr.getBundle(this.bundleName);
+		models.assetMgr.defaultBundleName = this.bundleName;
+		let bundle = await models.assetMgr.bundleMgr.getBundle(this.bundleName);
 		bundle.loadScene(`${startScene}`, function (err, scene) {
 			director.runScene(scene);
 		});

@@ -1,5 +1,4 @@
 import { _decorator, Component, Node, Toggle } from 'cc';
-import { assetsMgr } from '../../models/corekit';
 const { ccclass, property } = _decorator;
 
 @ccclass('dc')
@@ -7,7 +6,7 @@ export class dc extends Component {
 	@property(Node) pages: Node;
 
 	protected onLoad(): void {
-		assetsMgr.defaultBundleName = 'dc';
+		models.assetMgr.defaultBundleName = 'dc';
 	}
 
 	onSwitchPage(Toggle: Toggle) {

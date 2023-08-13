@@ -18,7 +18,7 @@
         "_value": true
       },
       "skeletal-animation": {
-        "_value": false
+        "_value": true
       },
       "3d": {
         "_value": true
@@ -27,39 +27,39 @@
         "_value": true
       },
       "xr": {
-        "_value": false
+        "_value": true
       },
       "ui": {
         "_value": true
       },
       "particle": {
-        "_value": false
+        "_value": true
       },
       "physics": {
         "_value": true,
         "_option": "physics-builtin"
       },
       "physics-ammo": {
-        "_value": false
+        "_value": true
       },
       "physics-cannon": {
-        "_value": false
+        "_value": true
       },
       "physics-physx": {
-        "_value": false
+        "_value": true
       },
       "physics-builtin": {
-        "_value": false
+        "_value": true
       },
       "physics-2d": {
         "_value": true,
         "_option": "physics-2d-box2d"
       },
       "physics-2d-box2d": {
-        "_value": false
+        "_value": true
       },
       "physics-2d-builtin": {
-        "_value": false
+        "_value": true
       },
       "intersection-2d": {
         "_value": true
@@ -101,7 +101,7 @@
         "_value": true
       },
       "terrain": {
-        "_value": false
+        "_value": true
       },
       "light-probe": {
         "_value": true
@@ -116,10 +116,13 @@
         "_value": true
       },
       "marionette": {
-        "_value": false
+        "_value": true
+      },
+      "procedural-animation": {
+        "_value": true
       },
       "custom-pipeline": {
-        "_value": false
+        "_value": true
       }
     },
     "includeModules": [
@@ -128,6 +131,7 @@
       "animation",
       "audio",
       "base",
+      "custom-pipeline",
       "debug-renderer",
       "dragon-bones",
       "geometry-renderer",
@@ -135,20 +139,26 @@
       "gfx-webgl2",
       "intersection-2d",
       "light-probe",
+      "marionette",
       "occlusion-query",
+      "particle",
       "particle-2d",
       "physics-2d-box2d",
       "physics-builtin",
       "primitive",
+      "procedural-animation",
       "profiler",
+      "skeletal-animation",
       "spine",
+      "terrain",
       "tiled-map",
       "tween",
       "ui",
       "video",
       "websocket",
       "websocket-server",
-      "webview"
+      "webview",
+      "xr"
     ],
     "noDeprecatedFeatures": {
       "value": false,

@@ -11,6 +11,7 @@ export class main extends Component {
 	@property(JsonAsset) jsonAsset: JsonAsset;
 
 	start() {
+		models.assetMgr.defaultBundleName = 'h5doc';
 		this.compList.prefabMap.set('tableItem', this.nodeItem);
 		console.log(this.jsonAsset.json);
 		this.compList.modelManager.clear();

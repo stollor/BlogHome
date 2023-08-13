@@ -1,6 +1,6 @@
-export class ToolUtils {
+export class ToolUtil {
 	//object 多重排序
-	static sortObjects(obj: any, ...props: any[]) {
+	sortObjects(obj: any, ...props: any[]) {
 		props = props.map((prop) => {
 			if (!(prop instanceof Array)) {
 				prop = [prop, true];
@@ -38,7 +38,7 @@ export class ToolUtils {
 	}
 
 	//object排序
-	static sortObject(obj: any, key: string, isAsc: boolean = true) {
+	sortObject(obj: any, key: string, isAsc: boolean = true) {
 		let arr = [];
 		for (let k in obj) {
 			arr.push(obj[k]);
@@ -53,12 +53,12 @@ export class ToolUtils {
 		return arr;
 	}
 
-	static mapTo(x, y, k = 1) {
+	mapTo(x, y, k = 1) {
 		return y * (1 - Math.exp(-k * x));
 	}
 
 	//实现一个洗牌算法
-	static shuffle(list: number[]) {
+	shuffle(list: number[]) {
 		for (let i = 0; i < list.length; i++) {
 			let j = Math.floor(Math.random() * (list.length - i)) + i;
 			[list[i], list[j]] = [list[j], list[i]];
@@ -70,7 +70,7 @@ export class ToolUtils {
 	 * @param func
 	 * @returns
 	 */
-	static cloneFunction(func) {
+	cloneFunction(func) {
 		const cloneFunc = function () {
 			return func.apply(this, arguments);
 		};
@@ -88,7 +88,7 @@ export class ToolUtils {
 	 * @param hash
 	 * @returns
 	 */
-	static deepClone<T extends object>(obj: T, hash = new WeakMap()): T {
+	deepClone<T extends object>(obj: T, hash = new WeakMap()): T {
 		// 返回基础类型
 		if (Object(obj) !== obj) {
 			return obj;
@@ -106,7 +106,7 @@ export class ToolUtils {
 
 		// 处理数组
 		if (obj instanceof Array) {
-			return obj.map((item) => ToolUtils.deepClone(item)) as T;
+			return obj.map((item) => this.deepClone(item)) as T;
 		}
 
 		// 解决循环引用
@@ -116,7 +116,7 @@ export class ToolUtils {
 
 		//处理函数
 		if (obj instanceof Function) {
-			return ToolUtils.cloneFunction(obj) as T;
+			return this.cloneFunction(obj) as T;
 		}
 
 		// 处理普通对象和类实例
@@ -125,7 +125,7 @@ export class ToolUtils {
 
 		for (let key in obj) {
 			if (Object.prototype.hasOwnProperty.call(obj, key)) {
-				result[key] = ToolUtils.deepClone(obj[key] as any, hash);
+				result[key] = this.deepClone(obj[key] as any, hash);
 			}
 		}
 
@@ -137,7 +137,12 @@ export class ToolUtils {
 	 * @param obj
 	 * @returns
 	 */
-	static isClassInstance(obj: any): boolean {
-		return obj !== null && typeof obj === 'object' && obj.constructor !== Object && Object.getPrototypeOf(obj) !== Object.prototype;
+	isClassInstance(obj: any): boolean {
+		return (
+			obj !== null &&
+			typeof obj === 'object' &&
+			obj.constructor !== Object &&
+			Object.getPrototypeOf(obj) !== Object.prototype
+		);
 	}
 }

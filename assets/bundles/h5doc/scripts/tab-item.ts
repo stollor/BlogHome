@@ -46,6 +46,6 @@ export class TabItem extends Component {
 		} else {
 			msg = btn.node.parent.name + '-' + btn.node.name;
 		}
-		em.emit('TableItem-onClick', msg);
+		models.em.emit('TableItem-onClick', msg);
 	}
 }

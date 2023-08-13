@@ -12,22 +12,14 @@ class BaseEvent {
 	}
 }
 
-declare global {
-	var em: EventManager;
-}
-
 /**
  * 全局事件管理
  */
-class EventManager {
+export class EventManager {
 	private _eventList: {} = {};
 	private _eventMap: {} = {};
 
 	public static instance: EventManager = null;
-	// static get instance(): EventMgr {
-	// 	return EventMgr._instance || (EventMgr._instance = new EventMgr());
-	// }
-
 	public getKey(list: any[], start, end) {
 		let key = '';
 		let maxLen = Math.min(end, list.length);
@@ -112,6 +104,3 @@ class EventManager {
 		this._eventList[type] = null;
 	}
 }
-
-const eventManager: EventManager = (EventManager.instance = new EventManager());
-globalThis.em = eventManager;

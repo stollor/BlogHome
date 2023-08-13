@@ -1,11 +1,10 @@
 import { _decorator, Component, v3 } from 'cc';
-import { EventMgr } from '../../../models/corekit/event-mgr';
 const { ccclass, property } = _decorator;
 
 @ccclass('creamMove')
 export class creamMove extends Component {
 	start() {
-		EventMgr.instance.on('Player-Move-Cream', this.onMove, this);
+		models.em.on('Player-Move-Cream', this.onMove, this);
 	}
 
 	onMove(data: any) {

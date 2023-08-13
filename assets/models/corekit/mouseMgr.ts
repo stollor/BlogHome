@@ -1,8 +1,8 @@
 import { _decorator, Component, EventMouse, find, Node } from 'cc';
 const { ccclass, property } = _decorator;
 
-@ccclass('mouseMgr')
-export class mouseMgr extends Component {
+@ccclass('MouseMgr')
+export class MouseMgr extends Component {
 	@property(Node) icon: Node;
 	start() {
 		// 获取Canvas节点

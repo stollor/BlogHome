@@ -1,6 +1,6 @@
 import { Color, Graphics, Vec2, Vec3 } from 'cc';
 
-export class draw {
+export class DrawUtil {
 	/**
 	 * 画直线
 	 * @param panit 画笔
@@ -9,7 +9,7 @@ export class draw {
 	 * @param color 颜色
 	 * @param width 宽度
 	 */
-	public static drawLine(panit: Graphics, p0: Vec3 | Vec2, p1: Vec3 | Vec2, color: Color, width: number) {
+	public drawLine(panit: Graphics, p0: Vec3 | Vec2, p1: Vec3 | Vec2, color: Color, width: number) {
 		panit.strokeColor = color;
 		panit.lineWidth = width;
 		panit.moveTo(p0.x, p0.y);

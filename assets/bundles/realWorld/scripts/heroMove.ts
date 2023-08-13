@@ -12,7 +12,6 @@ import {
 	input,
 	v2,
 } from 'cc';
-import { EventMgr } from '../../../models/corekit/event-mgr';
 const { ccclass, property } = _decorator;
 
 let XSpeed = 0;
@@ -56,7 +55,7 @@ export class HeroMove extends Component {
 
 	onTransformChanged() {
 		if (!this.jumping) {
-			EventMgr.instance.emit('Player-Move-Cream', { pos: this.node.worldPosition });
+			models.em.emit('Player-Move-Cream', { pos: this.node.worldPosition });
 		}
 	}
 

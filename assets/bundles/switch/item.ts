@@ -1,5 +1,4 @@
 import { Button, CCString, Color, Component, Sprite, _decorator, assetManager, director } from 'cc';
-import { TweenUtil } from '../../models/utils/tween';
 const { ccclass, property } = _decorator;
 
 @ccclass('item')
@@ -18,7 +17,7 @@ export class item extends Component {
 		this._colorSeedR = Math.random() * 180;
 		this._colorSeedG = Math.random() * 180;
 		this._colorSeedB = Math.random() * 180;
-		TweenUtil.showStyle1(this.node);
+		globalThis.models.utils.tween.showStyle1(this.node);
 	}
 
 	onButtonEvent() {

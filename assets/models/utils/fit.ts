@@ -1,8 +1,8 @@
 import { Component, ResolutionPolicy, _decorator, screen, view } from 'cc';
 const { ccclass, property } = _decorator;
 
-@ccclass('UIFit')
-export class UIFit extends Component {
+@ccclass('FitUtil')
+export class FitUtil extends Component {
 	start() {
 		//this.node.on(Node.EventType.SIZE_CHANGED, this.onSizeChange, this);
 		//view.on('design-resolution-changed', this.onDesignResolutionChanged, this);

@@ -1,5 +1,6 @@
 import { AssetManager, assetManager } from 'cc';
 import { catchAsync, catchError } from '../decorater/function';
+import { Scheduler } from 'cc';
 
 /**
  * bundle管理器
@@ -38,15 +39,17 @@ export class BundleMgr {
 	 * @param name bundle名字
 	 * @returns
 	 */
-	@catchAsync('加载bundle')
+	//@catchAsync('加载bundle')
 	public async loadBundle(name: string): Promise<AssetManager.Bundle> {
 		if (this._lock.get(name)) {
 			console.error(`bundle ${name} 正在加载中`);
 			return this._lock.get(name);
 		}
+
 		const promise = new Promise<AssetManager.Bundle>((resolve, reject) => {
 			assetManager.loadBundle(name, (err, bundle) => {
 				this._lock.delete(name);
+
 				if (err) reject(err);
 				else resolve(bundle);
 			});
