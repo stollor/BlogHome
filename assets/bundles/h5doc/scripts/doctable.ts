@@ -1,4 +1,5 @@
 import { _decorator, Color, Component, instantiate, JsonAsset, Label, Node, Sprite, UITransform } from 'cc';
+import { DEV } from 'cc/env';
 const { ccclass, property } = _decorator;
 
 @ccclass('doctable')
@@ -7,19 +8,33 @@ export class doctable extends Component {
 	@property(Node) nodeItemItemParent: Node;
 	@property(Node) nodeItemTypeParent: Node;
 
+	public path: string = './config/';
+
 	start() {
 		models.em.on('TableItem-onClick', this.onItemClick, this);
+		if (!DEV) {
+			models.electron.on('main_doc_readItem', this.onReadDoc.bind(this));
+		}
+	}
+
+	onReadDoc(data) {
+		console.log(data);
+		this.refresh(data);
 	}
 
 	onItemClick(msg: string) {
-		models.assetMgr.load('config/' + msg, JsonAsset).then(
-			(jsonAsset: JsonAsset) => {
-				this.refresh(jsonAsset.json);
-			},
-			() => {
-				this.nodeContent.removeAllChildren();
-			}
-		);
+		if (!DEV) {
+			models.electron.emit('render_doc_readItem', this.path + msg + '.json');
+		} else {
+			models.assetMgr.load('config/' + msg, JsonAsset).then(
+				(jsonAsset: JsonAsset) => {
+					this.refresh(jsonAsset.json);
+				},
+				() => {
+					this.nodeContent.removeAllChildren();
+				}
+			);
+		}
 	}
 
 	refresh(data) {

@@ -1,7 +1,6 @@
 {
     "start":"main",
     "models":[
-        "adapter",
         "utils"
     ]
 }

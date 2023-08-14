@@ -4,12 +4,15 @@ import { FitUtil } from './fit';
 import { MemoryUtil } from './memory';
 import { TweenUtil } from './tween';
 import { ToolUtil } from './tool';
+import { ModelMgr } from '../index';
 
-declare namespace models {
-	interface model {
+
+declare module "../index" {
+	interface ModelMgr {
 		utils: Utils;
 	}
 }
+
 
 export class Utils {
 	declare static instance: Utils;
@@ -31,7 +34,6 @@ export class Utils {
 	}
 }
 
-//@ts-ignore
-globalThis.models = globalThis.models || ({} as models.model);
-//@ts-ignore
-globalThis.models.utils = Utils.instance = new Utils();
+
+ModelMgr.prototype.utils= Utils.instance = new Utils();
+

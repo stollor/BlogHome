@@ -23,6 +23,7 @@ export class TabItem extends Component {
 	}
 
 	refresh(data: any) {
+		this.nodeContent.removeAllChildren();
 		this.btnTitle.node.getComponent(Label).string = data.name;
 		this.btnTitle.node.name = data.name;
 		this.nodeContent.name = data.name;

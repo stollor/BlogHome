@@ -17,7 +17,8 @@ export class item extends Component {
 		this._colorSeedR = Math.random() * 180;
 		this._colorSeedG = Math.random() * 180;
 		this._colorSeedB = Math.random() * 180;
-		globalThis.models.utils.tween.showStyle1(this.node);
+
+		models.utils.tween.showStyle1(this.node);
 	}
 
 	onButtonEvent() {

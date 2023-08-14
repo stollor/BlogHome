@@ -1,17 +1,15 @@
+import { ModelMgr } from '../index';
 import { AssetMgr } from './asset-mgr/assets-mgr';
+import { Electron } from './electron';
 import { EventManager } from './event-mgr';
-
-declare global {
-	var models: models.model;
-}
-
-declare namespace models {
-	interface model {
+declare module '../index' {
+	interface ModelMgr {
 		assetMgr: AssetMgr;
 		em: EventManager;
-		// Corekit 类型的属性和方法...
+		electron: Electron;
 	}
 }
-globalThis.models = globalThis.models || ({} as models.model);
-globalThis.models.assetMgr = AssetMgr.instance = new AssetMgr();
-globalThis.models.em = EventManager.instance = new EventManager();
+
+ModelMgr.prototype.assetMgr = AssetMgr.instance = new AssetMgr();
+ModelMgr.prototype.em = EventManager.instance = new EventManager();
+ModelMgr.prototype.electron = Electron.instance = new Electron();
