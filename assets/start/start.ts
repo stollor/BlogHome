@@ -21,8 +21,6 @@ export class Start extends Component {
 
 	async loadAsset() {
 		this.lbProgress.string = '0%';
-		// 添加短暂延迟等待浏览器发送预检请求
-		await new Promise((resolve) => setTimeout(resolve, 100));
 		let jsonAsset = await models.assetMgr.load('bundleConfig', JsonAsset, this.bundleName);
 		let list = jsonAsset.json.models;
 		let startScene = jsonAsset.json.start;

@@ -16,11 +16,15 @@ export class main extends Component {
 	start() {
 		models.assetMgr.defaultBundleName = 'h5doc';
 		this.compList.prefabMap.set('tableItem', this.nodeItem);
+		this.init();
+	}
+
+	init() {
 		if (!DEV) {
 			models.electron.on('main_doc_read', this.onReadDoc.bind(this));
 			models.electron.emit('render_doc_read', this.path + 'doc.json');
 		} else {
-			this.refresh(this.jsonAsset.json);
+			this.refresh(this.jsonAsset.json.data);
 		}
 	}
 

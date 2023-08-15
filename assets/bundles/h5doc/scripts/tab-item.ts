@@ -11,6 +11,7 @@ export class TabItem extends Component {
 	start() {
 		this.btnSwicht.node.on(Button.EventType.CLICK, this.onSwicht, this);
 		this.btnTitle.node.on(Button.EventType.CLICK, this.onClick, this);
+		models.em.on('TableItem-RefreshColor', this.onRefreshColor, this);
 	}
 
 	onSwicht() {
@@ -40,7 +41,8 @@ export class TabItem extends Component {
 	}
 
 	onClick(btn: Button) {
-		//btn.node.getComponent(Label).color = new Color('#99FF99');
+		models.em.emit('TableItem-RefreshColor', null);
+		btn.node.getComponent(Label).color = new Color('#66DD66');
 		let msg = '';
 		if (btn.node.parent.name == 'title') {
 			msg = btn.node.name;
@@ -48,5 +50,12 @@ export class TabItem extends Component {
 			msg = btn.node.parent.name + '-' + btn.node.name;
 		}
 		models.em.emit('TableItem-onClick', msg);
+	}
+
+	onRefreshColor() {
+		this.btnTitle.node.getComponent(Label).color = new Color('#14213d');
+		this.nodeContent.children.forEach((node) => {
+			node.getComponent(Label).color = new Color('#14213d');
+		});
 	}
 }
