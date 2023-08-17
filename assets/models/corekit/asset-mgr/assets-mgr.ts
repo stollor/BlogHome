@@ -17,11 +17,7 @@ export class AssetMgr {
 	}
 
 	@catchAsync('加载资源')
-	public async load<T extends typeof Asset = typeof Asset>(
-		url: string,
-		type: T = Asset as T,
-		bundleName: string = this.defaultBundleName
-	): Promise<InstanceType<T>> {
+	public async load<T extends typeof Asset = typeof Asset>(url: string, type: T = Asset as T, bundleName: string = this.defaultBundleName): Promise<InstanceType<T>> {
 		if (!bundleName) throw new Error('bundleName is empty');
 		if (!url) throw new Error('url is empty');
 		const bundle = await this._bundleMgr.getBundle(bundleName);

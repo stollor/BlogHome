@@ -5,7 +5,7 @@ const { ccclass, property } = _decorator;
 export class dc extends Component {
 	@property(Node) pages: Node;
 
-	protected onLoad(): void {
+	protected start(): void {
 		models.assetMgr.defaultBundleName = 'dc';
 	}
 

@@ -4,8 +4,8 @@ const { ccclass, property } = _decorator;
 /**
  * 这个文件是尝试 在浏览器环境读取本地json文件
  */
-@ccclass('readJson')
-export class readJson extends Component {
+@ccclass('BrowserMgr')
+export class BrowserMgr extends Component {
 	private _result;
 	start() {}
 
@@ -22,6 +22,7 @@ export class readJson extends Component {
 			console.log('读取结果：', this.result); //当读取完成之后会回调这个函数，然后此时文件的内容存储到了result中。直接操作即可。
 
 			console.log('读取结果转为JSON：');
+			//@ts-ignore
 			let json = JSON.parse(this.result);
 			console.log(json.name);
 			console.log(json.age);

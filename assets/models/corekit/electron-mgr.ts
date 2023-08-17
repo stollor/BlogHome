@@ -1,5 +1,5 @@
-export class Electron {
-	public static instance: Electron;
+export class ElectronManager {
+	public static instance: ElectronManager;
 
 	public emit(type: string, data: any) {
 		window['ipcRenderer'].send(type, data);
