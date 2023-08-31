@@ -1,5 +1,5 @@
 {
-  "ver": "1.2.0",
+  "ver": "1.1.0",
   "importer": "directory",
   "imported": true,
   "uuid": "c6c60111-ea0a-441f-a037-3fbe30659386",
@@ -7,6 +7,8 @@
   "subMetas": {},
   "userData": {
     "isBundle": true,
-    "bundleConfigID": "auto_244wjkJexDf56e1PaEtyrZ"
+    "bundleConfigID": "auto_244wjkJexDf56e1PaEtyrZ",
+    "compressionType": {},
+    "isRemoteBundle": {}
   }
 }

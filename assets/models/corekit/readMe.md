@@ -11,8 +11,12 @@
 # 功能说明
 
 ## 事件系统
+EventManger
+支持on,once,emit,off,offTarget.offEvent
+常规的使用方式
 
 ## 数据绑定
+DataListen
 
 ## UI管理
 

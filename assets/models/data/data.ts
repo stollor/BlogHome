@@ -1,33 +1,30 @@
-import { EditBox } from "cc";
-import { Label } from "cc";
-import { RichText } from "cc";
-import { Node } from "cc";
-
 /**
- * 数据
- * 数据监听
+ * 数据, 用于监听数据变化
  */
-export class Data {
-	private _val: any;
-	private _listener: Function[] = [];
+export class Data<T = any> {
+	public _value: T;
+	public _oldValue: T;
 
-	constructor(val?) {
-		if(val)this._val = val;
+	constructor(data: T) {
+		this._value = data;
+		this._oldValue = null;
 	}
 
-	public set(val) {
-		let old = this._val;
-		this._val = val;
-		this._listener.forEach(cb => {
-			cb(val, old);
-		})
+	public set value(value: T) {
+		if (this._value === value) return;
+		this._oldValue = this._value;
+		this._value = value;
+		this.onChange(this._value, this._oldValue);
 	}
 
-	public get() {
-		return this._val;
+	public get value(): T {
+		return this._value;
 	}
 
-	public addListener(cb: (val: any, oldVal?: any) => void) {
-		this._listener.push(cb);
-	}
+	/**
+	 * 监听数据变化
+	 * @param newData 新数据
+	 * @param oldData 旧数据
+	 */
+	public onChange(newData: T, oldData: T) {}
 }

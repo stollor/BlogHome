@@ -7,7 +7,7 @@ declare module 'cc' {
 		/**增加的方法 */
 		setStr: (str: string | number) => void;
 		setImg: (frame: SpriteFrame) => void;
-
+		setImgSrc: (src: string) => void;
 		/**扩展的方法 */
 		//on: (type, callback, target, useCapture?, video?) => void;
 		//oparity:number;
@@ -39,9 +39,9 @@ Node.prototype.setImg = function (frame: SpriteFrame) {
 	comp.markAsset(frame);
 };
 
-Node.prototype.bindData = function (data: Data) {
-	data.addListener((val) => {
-		this.setStr(val);
+Node.prototype.setImgSrc = function (src: string) {
+	models.assetMgr.load(src + '/spriteFrame', SpriteFrame).then((frame) => {
+		this.setImg(frame);
 	});
 };
 

@@ -1,0 +1,7 @@
+{
+    "start": "main",
+    "models": [
+        "utils",
+        "data"
+    ]
+}

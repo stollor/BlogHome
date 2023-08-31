@@ -20,17 +20,6 @@ export class EventManager {
 	private _eventMap: {} = {};
 
 	public static instance: EventManager = null;
-	public getKey(list: any[], start, end) {
-		let key = '';
-		let maxLen = Math.min(end, list.length);
-		for (let i = start; i <= maxLen; i++) {
-			key += list[i];
-			if (i < maxLen - 1) {
-				key += '_';
-			}
-		}
-		return key;
-	}
 
 	/**监听事件
 	 * @param type 事件类型
@@ -42,6 +31,17 @@ export class EventManager {
 		let tempBaseEvent = new BaseEvent(target, event);
 		this._eventList[type] = this._eventList[type] || [];
 		this._eventList[type].push(tempBaseEvent);
+	}
+
+	public once(type: string, event: Function, target: any) {
+		this.on(
+			type,
+			(data) => {
+				event.call(target, data);
+				this.off(type, event, target);
+			},
+			target
+		);
 	}
 
 	/**移除事件

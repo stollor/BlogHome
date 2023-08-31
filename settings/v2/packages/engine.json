@@ -146,7 +146,6 @@
       "physics-2d-box2d",
       "physics-builtin",
       "primitive",
-      "procedural-animation",
       "profiler",
       "skeletal-animation",
       "spine",
