@@ -1,10 +1,11 @@
 {
-  "ver": "1.0.1",
-  "importer": "text",
+  "ver": "1.0.0",
+  "importer": "*",
   "imported": true,
   "uuid": "20dd1d04-0267-46e1-9f35-3a8ae0e09ae7",
   "files": [
-    ".json"
+    ".json",
+    ".md"
   ],
   "subMetas": {},
   "userData": {}

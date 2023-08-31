@@ -1,5 +1,6 @@
 import { _decorator, Color, Component, instantiate, JsonAsset, Label, Node, Sprite, UITransform } from 'cc';
-import { DEV } from 'cc/env';
+import { buildPlantfrom, buildPlantfromType } from './main';
+import { ConfigNet } from './net';
 const { ccclass, property } = _decorator;
 
 @ccclass('doctable')
@@ -12,8 +13,11 @@ export class doctable extends Component {
 
 	start() {
 		models.em.on('TableItem-onClick', this.onItemClick, this);
-		if (!DEV) {
-			models.electron.on('main_doc_readItem', this.onReadDoc.bind(this));
+		switch (buildPlantfrom) {
+			case buildPlantfromType.electron: {
+				models.electron.on('main_doc_readItem', this.onReadDoc.bind(this));
+				break;
+			}
 		}
 	}
 
@@ -23,17 +27,30 @@ export class doctable extends Component {
 	}
 
 	onItemClick(msg: string) {
-		if (!DEV) {
-			models.electron.emit('render_doc_readItem', this.path + msg + '.json');
+		if (buildPlantfrom) {
 		} else {
-			models.assetMgr.load('config/' + msg, JsonAsset).then(
-				(jsonAsset: JsonAsset) => {
-					this.refresh(jsonAsset.json);
-				},
-				() => {
-					this.nodeContent.removeAllChildren();
-				}
-			);
+		}
+
+		switch (buildPlantfrom) {
+			case buildPlantfromType.electron: {
+				models.electron.emit('render_doc_readItem', this.path + msg + '.json');
+				break;
+			}
+			case buildPlantfromType.webDev: {
+				models.assetMgr.load('config/' + msg, JsonAsset).then(
+					(jsonAsset: JsonAsset) => {
+						this.refresh(jsonAsset.json);
+					},
+					() => {
+						this.nodeContent.removeAllChildren();
+					}
+				);
+				break;
+			}
+			case buildPlantfromType.webServer: {
+				ConfigNet.getFile(msg + '.json', this.refresh.bind(this));
+				break;
+			}
 		}
 	}
 

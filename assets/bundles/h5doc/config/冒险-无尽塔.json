@@ -1,0 +1,108 @@
+{
+    "info":"无尽塔的解锁条件在 unlock表中的 冒险之路 一行\n ",
+    "interface":[
+        {
+            "name":"名称",
+            "url":"接口",
+            "param":"参数",
+            "return":"返回值",
+            "desc":"备注"
+        },
+        {
+            "name":"布阵",
+            "url":"/game/endless/deploy",
+            "param":"towerID：塔id，cardIDs：卡牌dbid列表",
+            "return":"无.",
+            "desc":""
+        },
+        {
+            "name":"战斗开始",
+            "url":"/game/endless/battle/start",
+            "param":"gateID：关卡id",
+            "return":"model：{endless_battle: 战斗数据}",
+            "desc":""
+        },
+        {
+            "name":"战斗结束",
+            "url":"/game/endless/battle/end",
+            "param":"battleID：战斗id，gateID：关卡id，result：战斗结果，round：（具体含义要参照口袋），actions：操作记录",
+            "return":"view: {ret: win, drop: {xxx: xxx}}",
+            "desc":""
+        },
+        {
+            "name":"扫荡",
+            "url":"/game/endless/saodang",
+            "param":"",
+            "return":"view: {ret: win, drop: {xxx: xxx}}",
+            "desc":"只有主塔可以扫荡"
+        },
+        {
+            "name":"碾压",
+            "url":"/game/endless/pass",
+            "param":"towerID：塔csvID",
+            "return":"view: {drop: {xxx: xxx}}",
+            "desc":"种族塔的可碾压关卡数受每日挑战次数限制；0-主塔，其他-种族塔"
+        },
+        {
+            "name":"关卡节点宝箱领取",
+            "url":"/game/endless/chest/award/get",
+            "param":"gateID：关卡id",
+            "return":"",
+            "desc":""
+        },
+        {
+            "name":"战报列表",
+            "url":"/game/endless/plays/list",
+            "param":"gateID：关卡id",
+            "return":"view：{latesPlays: [....]}",
+            "desc":""
+        },
+        {
+            "name":"战报详情",
+            "url":"/game/endless/play/detail",
+            "param":"playID：战报dbid",
+            "return":"model：{endless_playrecords: {playID: 战报数据}}",
+            "desc":"只有主塔可以扫荡"
+        },
+        {
+            "name":"排行榜",
+            "url":"/game/endless/rank",
+            "param":"towerID：塔id，offest：起点，size：数量",
+            "return":"view: {rank: 排行数据列表, myrank: 我的排名, offset: 起点, size: 数量}",
+            "desc":""
+        }
+
+    ],
+    "database":[
+        {
+            "name":"字段",
+            "type":"类型",
+            "desc":"备注"
+        },
+        {
+            "name":"role.endless_tower",
+            "type":"{塔id:关卡id}",
+            "desc":"无尽塔通关信息"
+        },
+        {
+            "name":"role.endless_tower_cards",
+            "type":"{塔id:[精灵dbid,...]}",
+            "desc":"无尽塔布阵"
+        },
+        {
+            "name":"role.endless_tower_awards",
+            "type":"{关卡id:1(可领)/0(已领}",
+            "desc":"无尽塔阶段奖励"
+        },
+        {
+            "name":"daily_record.endless_tower_challenges",
+            "type":"{塔id:number}",
+            "desc":"种族塔每日挑战次数"
+        },
+        {
+            "name":"daily_record.endless_tower_saodang",
+            "type":"int",
+            "desc":"主塔每日扫荡次数"
+        }
+    ]
+}

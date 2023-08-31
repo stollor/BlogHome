@@ -1,15 +1,9 @@
-declare global{
-    var models:ModelMgr
+declare global {
+	var models: ModelMgr;
 }
 
-export class ModelMgr{
-    public static instance:ModelMgr;
+export class ModelMgr {
+	public static instance: ModelMgr;
 }
 
-
-
-globalThis.models= ModelMgr.instance = new ModelMgr();
-
-
-
-
+globalThis.models = ModelMgr.instance = new ModelMgr();
