@@ -24,7 +24,7 @@ export class main extends Component {
 	public path: string = './config/';
 
 	start() {
-		game.frameRate = 41;
+		game.frameRate = 40;
 		models.assetMgr.defaultBundleName = 'h5doc';
 		this.compList.prefabMap.set('tableItem', this.nodeItem);
 		this.init();
