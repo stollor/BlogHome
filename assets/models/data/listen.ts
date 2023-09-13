@@ -50,12 +50,11 @@ export class Listen extends Component {
 		if (!this.key) return;
 
 		this.data = models.database.get(this.key);
-		this.data.onChange = (val, _) => {
-			this.onChange(val);
-		};
+		this.data.on('change', this.onChange, this);
 	}
 
-	onChange(val) {
+	onChange(data) {
+		let val = data.newValue;
 		switch (this.type) {
 			case ListenType.Label:
 				{

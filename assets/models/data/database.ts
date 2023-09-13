@@ -1,11 +1,15 @@
 import { Data } from './data';
 
+/**
+ * 数据库
+ * 用key-value的形式存储数据
+ */
 export class Database {
 	public static instance: Database = null;
 
 	private _map: Map<string, Data> = new Map<string, Data>();
 
-	public get(key: string): Data {
+	public get<T = any>(key: string): Data<T> {
 		let data = this._map.get(key);
 		if (!data) {
 			data = new Data(0);
