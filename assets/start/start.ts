@@ -24,7 +24,7 @@ export class Start extends Component {
 		if (!this.bundleName) {
 			return;
 		}
-		let jsonAsset = await models.assetMgr.load('bundleConfig', JsonAsset, this.bundleName);
+		let jsonAsset = await models.assetMgr.load('config', JsonAsset, this.bundleName);
 		let list = jsonAsset.json.models;
 		let startScene = jsonAsset.json.start;
 		for (let i = 0; i < list.length; i++) {

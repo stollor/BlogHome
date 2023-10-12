@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="iconFont.css">
+    <link rel="stylesheet" href="iconfont.css">
     <script src="vue.min.js"></script>
     <meta charset="utf-8">
 </head>
@@ -11,7 +11,7 @@
         -webkit-font-smoothing: subpixel-antialiased;
         margin: 0px;
         padding: 0px;
-        background: #2c2c2c;
+        background: #2c2c2c;        
         /* linear-gradient(rgb(45, 45, 45), rgb(25, 25, 25)); */
         color: rgb(189, 189, 189);
         /* font-size: 12px; */
@@ -25,6 +25,7 @@
         border-style: none;
         background-color: #2c2c2c;
         border: 0.5px solid rgb(87, 86, 86);
+        cursor: pointer;
     }
 
     button:hover{
@@ -86,8 +87,10 @@
         margin-top: 2px;
         margin-left: 4px;
         margin-right: 4px;
-        color: black;
-        background-color: whitesmoke;
+        /* color: black;
+        background-color: whitesmoke; */
+        color: whitesmoke;
+        background-color: black;
         border: 1px;
         border-radius: 0.4em;
     }
@@ -333,6 +336,7 @@
     .searchTitle {
         padding: 0.3em;
         padding-bottom: 0;
+        display: flex;
     }
 
     .searchTitle label {
@@ -348,7 +352,7 @@
     }
 
     .searchList .itemPath {
-        color: gray;
+        /* color: gray; */
         font-size: 0.9em;
     }
 
@@ -424,17 +428,25 @@
     }
 
 
-
+    .alignLeft{
+        text-align: left;
+    }
+    .alignRight{
+        text-align: right;
+    }
     .nodePropertyTitle {
         display: inline-block;
         width: 5em;
-        color: rgb(150, 150, 150);
-        text-align: right;
+        /* color: rgb(150, 150, 150); */
+        color: rgb(189,189,189);
+        /* text-align: right; */
         word-wrap: break-word;
         /* word-break:normal; */
         white-space: pre-wrap;
         line-height: 0.95em;
         margin-right: 1px;
+        padding-left: 0.2em;
+        padding-right: 0.2em;
     }
 
     .nodePropertyTitle::selection {
@@ -466,7 +478,7 @@
     .nodePropertySubTitle {
         display: inline-block;
         width: 1em;
-        text-align: start;
+        text-align: center;
         line-height: 0.95em;
     }
 
@@ -484,6 +496,7 @@
         min-width: 100px;
         max-width: 172px;
         word-wrap: break-word;
+        text-align: start;
         /* word-break:normal; */
         /* white-space: wrap; */
         line-height: 0.95em;
@@ -537,6 +550,7 @@
 
     .settingDesc{
         color: gray;
+        word-break: break-all;
     }
 
     .setting {
@@ -578,7 +592,7 @@
         margin-bottom: 10px;
     }
 
-    .setting span {
+    .setting .iconfont {
         cursor: pointer;
     }
 
@@ -804,7 +818,7 @@
             <!-- http://gameview.creator-star.cn/cocos/cake/index.html -->
             <!-- http://localhost:7456 -->
             <webview ref="wv" preload="./preload.js" :src="gameUrl" :style="setting.webviewStyle"
-                :disablewebsecurity="disableWebSec" nodeintegrationinsubframes="true"
+                :disablewebsecurity="disableWebSec" partition="persist:game2" nodeintegrationinsubframes="true"
                 webpreferences="contextIsolation=no"></webview>
             <hr>
             <div class="logs" ref="logs">
@@ -903,6 +917,10 @@
                     <input type="number" @change="saveToStorage" v-model="logCount" min="0" max="100" step="1" />
                 </label>
                 <label>
+                    <input type="checkbox" @change="saveToStorage" v-model="propertyAlignLeft" step="1" min="0" max="100"  />
+                    {{useChinese ? "属性名左对齐":"Left Align Property Names"}}
+                </label>
+                <label>
                     {{useChinese ? "打开数组，当长度小于或等于：":"Open Array if length <=:"}}
                     <input type="number" @change="saveToStorage" v-model.number="openArrayLimit" step="1" min="0" max="100"  />
                 </label>
@@ -939,6 +957,24 @@
                 <label>
                     <input type="checkbox" @change="saveToStorage" v-model="syncNodeDetail" />
                     {{useChinese ? "自动同步选中节点属性的变化":"Sync Node Detail"}}
+                </label>
+                <label>
+                    <input type="checkbox" @change="saveToStorage" v-model="openHttpProxy" />
+                    {{useChinese ? "开启http代理":"Open Http Proxy"}}
+                    
+                </label>
+                <hr>
+                <label>
+                    {{useChinese ? "代理服务器":"Http Proxy Server"}}<br>
+                    <span class="settingDesc">{{useChinese ? "范例:":"example:"}}http=http://ip:port;https=https://ip:port</span>
+                    <textarea @contextmenu="showInputMenu()" @blur="saveToStorage"
+                        v-model="httpProxyServer" :disabled="!openHttpProxy" ></textarea>
+                </label>
+                <label>
+                    {{useChinese ? "排除规则":"Bypass Rules"}}<br>
+                    <span class="settingDesc">{{useChinese ? "范例:":"example:"}}foobar.com,*foobar.com,*.foobar.com,*foobar.com:99,https://x.\*.y.com:99</span>
+                    <textarea @contextmenu="showInputMenu()" @blur="saveToStorage"
+                        v-model="proxyBypassRules" :disabled="!openHttpProxy"></textarea>
                 </label>
                 <hr>
                 <br>

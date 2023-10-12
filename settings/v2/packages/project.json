@@ -13,41 +13,26 @@
     "collisionGroups": [
       {
         "index": 1,
-        "name": "tiled"
-      },
-      {
-        "index": 2,
-        "name": "player"
-      },
-      {
-        "index": 3,
         "name": "enemy"
       },
       {
-        "index": 4,
+        "index": 2,
         "name": "skill"
       },
       {
-        "index": 5,
-        "name": "sensor"
-      },
-      {
-        "index": 6,
-        "name": "testItem"
-      },
-      {
-        "index": 7,
-        "name": "UIButton"
+        "index": 3,
+        "name": "wall"
       }
     ],
     "collisionMatrix": {
       "0": 0,
-      "1": 4,
-      "2": 10,
-      "3": 60,
+      "1": 12,
+      "2": 2,
+      "3": 50,
       "4": 8,
       "5": 8,
-      "6": 64
+      "6": 64,
+      "7": 0
     },
     "gravity": {
       "y": -100

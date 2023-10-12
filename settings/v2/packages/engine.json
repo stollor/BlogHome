@@ -53,7 +53,7 @@
       },
       "physics-2d": {
         "_value": true,
-        "_option": "physics-2d-box2d"
+        "_option": "physics-2d-builtin"
       },
       "physics-2d-box2d": {
         "_value": true
@@ -118,10 +118,10 @@
       "marionette": {
         "_value": true
       },
-      "procedural-animation": {
+      "custom-pipeline": {
         "_value": true
       },
-      "custom-pipeline": {
+      "procedural-animation": {
         "_value": true
       }
     },
@@ -143,7 +143,7 @@
       "occlusion-query",
       "particle",
       "particle-2d",
-      "physics-2d-box2d",
+      "physics-2d-builtin",
       "physics-builtin",
       "primitive",
       "profiler",

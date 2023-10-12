@@ -1,3 +1,5 @@
+import { Node } from 'cc';
+
 export class ToolUtil {
 	//object 多重排序
 	sortObjects(obj: any, ...props: any[]) {
@@ -104,19 +106,25 @@ export class ToolUtil {
 			return new RegExp(obj) as T;
 		}
 
-		// 处理数组
-		if (obj instanceof Array) {
-			return obj.map((item) => this.deepClone(item)) as T;
-		}
-
 		// 解决循环引用
 		if (hash.has(obj)) {
 			return hash.get(obj); // 解决循环引用
 		}
 
+		// 处理数组
+		if (obj instanceof Array) {
+			return obj.map((item) => this.deepClone(item)) as T;
+		}
+
 		//处理函数
 		if (obj instanceof Function) {
 			return this.cloneFunction(obj) as T;
+		}
+
+		//处理node
+		if (obj instanceof Node) {
+			return obj;
+			//return instantiate(obj);
 		}
 
 		// 处理普通对象和类实例

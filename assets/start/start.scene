@@ -101,7 +101,7 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 960,
+      "x": 960.0000000000001,
       "y": 540,
       "z": 0
     },
@@ -187,7 +187,7 @@
     "_priority": 1073741824,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 617.0444763271162,
+    "_orthoHeight": 590.8751793400287,
     "_near": 1,
     "_far": 2000,
     "_color": {
@@ -941,8 +941,8 @@
     "__prefab": null,
     "_alignFlags": 45,
     "_target": null,
-    "_left": 0,
-    "_right": 0,
+    "_left": 1.1368683772161603e-13,
+    "_right": 1.1368683772161603e-13,
     "_top": 0,
     "_bottom": 0,
     "_horizontalCenter": 0,
@@ -972,7 +972,7 @@
     "lbProgress": {
       "__id__": 12
     },
-    "bundleName": "uicase",
+    "bundleName": "chronofortress",
     "_id": "8aHB2UHTFK4a2mFbEF2yr5"
   },
   {
