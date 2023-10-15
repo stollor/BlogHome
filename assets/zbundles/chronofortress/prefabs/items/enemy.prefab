@@ -77,8 +77,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 100
+      "width": 50,
+      "height": 50
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -107,9 +107,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 99,
-      "g": 0,
-      "b": 0,
+      "r": 255,
+      "g": 255,
+      "b": 255,
       "a": 255
     },
     "_spriteFrame": {
@@ -146,9 +146,6 @@
     "__prefab": {
       "__id__": 7
     },
-    "propSpeed": 30,
-    "propHp": 100,
-    "propAttack": 10,
     "collider": {
       "__id__": 8
     },
@@ -182,8 +179,8 @@
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 100
+      "width": 50,
+      "height": 50
     },
     "_id": ""
   },
@@ -200,6 +197,7 @@
       "__id__": 0
     },
     "fileId": "8aTwo9mClDGLDCj2bY/pYF",
+    "instance": null,
     "targetOverrides": null
   }
 ]

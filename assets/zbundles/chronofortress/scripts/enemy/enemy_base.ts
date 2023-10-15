@@ -1,4 +1,4 @@
-import { _decorator, Collider2D, Component, Contact2DType } from 'cc';
+import { Collider2D, Color, Component, Contact2DType, Sprite, _decorator } from 'cc';
 import { DamageCount } from '../battle/damageCount';
 import { PHY_GROUP } from '../define/physics';
 import { EffectController } from '../effect/effect_controller';
@@ -33,6 +33,7 @@ export class EnemyBase extends Component {
 	//专属变量
 	private _cumAttackTime: number = 0;
 	private _objAttack: Wall = null;
+	private _onHitColorCount: number = 0;
 
 	constructor() {
 		super();
@@ -51,6 +52,7 @@ export class EnemyBase extends Component {
 	onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: any) {
 		if (otherCollider.group == PHY_GROUP.SKILL) {
 			let buttle = otherCollider.node.getComponent(BulletBase);
+			if (buttle.ignoreEnemys.indexOf(selfCollider.node) >= 0) return;
 			if (!buttle.isLock) {
 				DamageCount.check(this, buttle);
 			}
@@ -85,6 +87,7 @@ export class EnemyBase extends Component {
 	onGetHit(attack: number) {
 		let resultAttack = attack;
 		this.prop.hp -= resultAttack;
+		this._onHitColor();
 		EffectController.instance.showAttackLabel(this.node, resultAttack * -1);
 		if (this.prop.hp <= 0) {
 			this.onDead();
@@ -92,6 +95,18 @@ export class EnemyBase extends Component {
 	}
 
 	onDead() {
+		this.unscheduleAllCallbacks();
 		this.node.destroy();
+	}
+
+	_onHitColor() {
+		this._onHitColorCount++;
+		this.node.getComponent(Sprite)!.color = new Color('#FF2333');
+		this.scheduleOnce(() => {
+			this._onHitColorCount--;
+			if (this._onHitColorCount <= 0) {
+				this.node.getComponent(Sprite)!.color = new Color('#FFFFFF');
+			}
+		});
 	}
 }

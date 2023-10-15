@@ -29,7 +29,7 @@ export class DamageCount {
 		bullet.prop.speed *= bullet.prop.speedDecay;
 		bullet.prop.attack *= bullet.prop.speedDecay;
 		if (bullet.prop.reflect) {
-			bullet.prop.angle = 180 - bullet.prop.angle;
+			bullet.angle = 180 - bullet.angle;
 		}
 		if (bullet.prop.penetr < 1) {
 			bullet.node.destroy();
@@ -50,10 +50,12 @@ export class DamageCount {
 			for (let i = 0; i < bullet.prop.splitCount; i++) {
 				let node = instantiate(bullet.node);
 				node.getComponent(Sprite).color = new Color('#ffff00');
+				node.active = true;
 				let tmpBullet = node.getComponent(BulletBase);
-				tmpBullet.prop.angle = bullet.prop.angle;
-				tmpBullet.prop.angle += start - interDir * i;
-
+				tmpBullet.angle = bullet.angle;
+				tmpBullet.angle += start - interDir * i;
+				tmpBullet.ignoreEnemys.push(enemy.node);
+				tmpBullet.prop = bullet.prop;
 				tmpBullet.prop.splitTimes -= 1;
 				node.parent = bullet.node.parent;
 				node.position = bullet.node.position;

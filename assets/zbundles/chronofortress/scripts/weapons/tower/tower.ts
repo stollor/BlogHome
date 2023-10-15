@@ -1,26 +1,48 @@
 import { _decorator, Component, EventTouch, Input, input, instantiate, Node, UITransform, Vec3 } from 'cc';
 import { dt } from '../../define/physics';
+import { BulletProp } from '../bullet_prop';
 import { WeaponProp } from '../weapon_prop';
 import { Bullet } from './bullet';
 const { ccclass, property } = _decorator;
 
 @ccclass('Tower')
 export class Tower extends Component {
-	@property(Node) nodeBulletLimit: Node;
-	@property(Node) nodeEnemy: Node;
-	@property(Node) nodeButton: Node;
+	@property(Node) nodeBulletParent: Node;
+	@property(Node) nodeButtonItem: Node;
+	@property([Node]) nodeEnemys: Node[] = [];
+
+	public bulletProp: BulletProp = {
+		speed: 700,
+		lifeTime: 4,
+		attack: 10,
+		penetr: 1,
+		critRate: 0.1,
+		critMultiplier: 1,
+		speedDecay: 0.6,
+		splitCount: 3,
+		splitTimes: 0,
+		lifeSteal: 0,
+		reflect: false,
+		boom: false,
+	};
 
 	public prop: WeaponProp = new WeaponProp();
 
 	private _autoShot: boolean = false;
+	private _autoFind: boolean = false;
 	private _run: boolean = false;
 	private _cumTime: number = 0;
 	private _touchPos: Vec3;
 	private _lastObjEnemy: Node = null;
+	private _lastAngle: number = 90;
 	private _ui: UITransform;
 	//用于频繁计算的变量,避免无效的对象开销
 	private _math_ObjWorldPosition: Vec3 = new Vec3();
 	private _math_ObjLocalPosition: Vec3 = new Vec3();
+
+	set autoShot(val: boolean) {
+		this._autoShot = val;
+	}
 
 	start() {
 		input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
@@ -31,6 +53,9 @@ export class Tower extends Component {
 		this._ui = this.node.getComponent(UITransform)!;
 		this._run = true;
 		this._autoShot = true;
+		this._autoFind = false;
+
+		globalThis.tower = this;
 	}
 
 	initProp() {
@@ -57,13 +82,19 @@ export class Tower extends Component {
 			let pos2 = this._ui.convertToNodeSpaceAR(this._touchPos);
 			//相对于塔的角度
 			let angle = (Math.atan2(pos2.y, pos2.x) * 180) / Math.PI;
+			this._lastAngle = angle;
 			return angle;
 		} else if (this._autoShot) {
-			if (!this._lastObjEnemy || !this._lastObjEnemy.isValid) {
-				this._lastObjEnemy = this.getNearestEnemy();
-				if (!this._lastObjEnemy) return -1;
+			if (this._autoFind) {
+				if (!this._lastObjEnemy || !this._lastObjEnemy.isValid) {
+					this._lastObjEnemy = this.getNearestEnemy();
+					if (!this._lastObjEnemy) return -1;
+				}
+				this._lastAngle = this._getAngle(this._lastObjEnemy);
+				return this._lastAngle;
+			} else {
+				return this._lastAngle;
 			}
-			return this._getAngle(this._lastObjEnemy);
 		} else {
 			return -1;
 		}
@@ -78,12 +109,14 @@ export class Tower extends Component {
 
 	getNearestEnemy(): Node {
 		let result: Node = null;
-		let length = this.nodeEnemy.children.length;
-		let interval = Math.max(~~(length / 10), 1);
-		for (let i = 0; i < length; i = i + interval) {
-			if (!result) result = this.nodeEnemy.children[i];
-			else if (result.position.y > this.nodeEnemy.children[i].position.y) result = this.nodeEnemy.children[i];
-		}
+		this.nodeEnemys.forEach((enemyParent: Node) => {
+			let length = enemyParent.children.length;
+			let interval = Math.max(~~(length / 10), 1);
+			for (let i = 0; i < length; i = i + interval) {
+				if (!result) result = enemyParent.children[i];
+				else if (result.position.y > enemyParent.children[i].position.y) result = enemyParent.children[i];
+			}
+		});
 		return result;
 	}
 
@@ -103,13 +136,14 @@ export class Tower extends Component {
 	}
 
 	_onShot(angle: number) {
-		let node = instantiate(this.nodeButton);
-		node.parent = this.nodeBulletLimit;
-		let pos = this.nodeBulletLimit.getComponent(UITransform)!.convertToNodeSpaceAR(this.node.getWorldPosition());
+		let node = instantiate(this.nodeButtonItem);
+		node.parent = this.nodeBulletParent;
+		let pos = this.nodeBulletParent.getComponent(UITransform)!.convertToNodeSpaceAR(this.node.getWorldPosition());
 		node.position = pos;
 		let bullet = node.getComponent(Bullet)!;
-		bullet.prop.angle = angle;
+		bullet.angle = angle;
 		bullet.run = true;
+		bullet.prop = this.bulletProp;
 		return node;
 	}
 
