@@ -46,7 +46,7 @@ export class TestGroup extends Component {
 			tower.prop.interTime = 0.25;
 			tower.prop.track = 1;
 			tower.prop.wave = 1;
-			tower.bulletProp.attack = 10;
+			tower.prop.attack = 10;
 			this.scheduleOnce(() => {
 				resolve(tower);
 			}, time);
@@ -55,24 +55,24 @@ export class TestGroup extends Component {
 
 	async state2(tower: Tower = this.tower, time: number = 5) {
 		this.lbTest.string = '增加弹轨';
-		return this._Tower(tower, 'track', 1, 5, time);
+		return this._Weapon(tower, 'track', 1, 5, time);
 	}
 
 	async state3(tower: Tower = this.tower, time: number = 5) {
 		this.lbTest.string = '增加波次';
-		return this._Tower(tower, 'wave', 1, 5, time);
+		return this._Weapon(tower, 'wave', 1, 5, time);
 	}
 
 	async state4(tower: Tower = this.tower, time: number = 5) {
 		this.lbTest.string = '穿透弹';
-		return this._bullet(tower, 'penetr', 1, 5, time);
+		return this._Weapon(tower, 'penetr', 1, 5, time);
 	}
 	async state5(tower: Tower = this.tower, time: number = 5) {
 		this.lbTest.string = '分裂弹';
-		return this._bullet(tower, 'splitTimes', 1, 5, time);
+		return this._Weapon(tower, 'splitTimes', 1, 5, time);
 	}
 
-	_Tower(tower: Tower, val: any, startNum: number, endNum: number, time: number = 5) {
+	_Weapon(tower: Tower, val: any, startNum: number, endNum: number, time: number = 5) {
 		return new Promise((resolve, reject) => {
 			for (let i = 0; i < endNum; i++) {
 				this.scheduleOnce(() => {
@@ -81,20 +81,6 @@ export class TestGroup extends Component {
 			}
 			this.scheduleOnce(() => {
 				tower.prop[val] = startNum;
-				resolve(tower);
-			}, time);
-		});
-	}
-
-	_bullet(tower: Tower, val: any, startNum: number, endNum: number, time: number = 5) {
-		return new Promise((resolve, reject) => {
-			for (let i = 0; i < endNum; i++) {
-				this.scheduleOnce(() => {
-					tower.bulletProp[val] = startNum + i;
-				}, (time / endNum) * i);
-			}
-			this.scheduleOnce(() => {
-				tower.bulletProp[val] = startNum;
 				resolve(tower);
 			}, time);
 		});

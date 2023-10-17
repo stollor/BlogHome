@@ -1,4 +1,5 @@
 import { _decorator } from 'cc';
+import { enemyConfig } from '../../config/enemy';
 import { EnemyBase } from './enemy_base';
 const { ccclass, property } = _decorator;
 
@@ -6,10 +7,7 @@ const { ccclass, property } = _decorator;
 export class Enemy extends EnemyBase {
 	constructor() {
 		super();
-		this.baseProp.attack = 20;
-		this.baseProp.hp = 200;
-		this.baseProp.speed = 100;
-		this.baseProp.attackInterval = 1;
-		this.prop = models.utils.tool.deepClone(this.baseProp);
+		this.baseProp = enemyConfig.base;
+		this.refreshProp();
 	}
 }

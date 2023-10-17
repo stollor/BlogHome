@@ -1,7 +1,7 @@
-import { _decorator, Component, EventTouch, Input, input, instantiate, Node, UITransform, Vec3 } from 'cc';
+import { _decorator, Component, EventTouch, Input, input, instantiate, isValid, Node, UITransform, Vec3 } from 'cc';
+import { weaponConfig } from '../../../config/weapon';
 import { dt } from '../../define/physics';
-import { BulletProp } from '../bullet_prop';
-import { WeaponProp } from '../weapon_prop';
+import { WeaponProp } from '../../define/prop';
 import { Bullet } from './bullet';
 const { ccclass, property } = _decorator;
 
@@ -10,23 +10,6 @@ export class Tower extends Component {
 	@property(Node) nodeBulletParent: Node;
 	@property(Node) nodeButtonItem: Node;
 	@property([Node]) nodeEnemys: Node[] = [];
-
-	public bulletProp: BulletProp = {
-		speed: 700,
-		lifeTime: 4,
-		attack: 10,
-		penetr: 1,
-		critRate: 0.1,
-		critMultiplier: 1,
-		speedDecay: 0.6,
-		splitCount: 3,
-		splitTimes: 0,
-		lifeSteal: 0,
-		reflect: false,
-		boom: false,
-	};
-
-	public prop: WeaponProp = new WeaponProp();
 
 	private _autoShot: boolean = false;
 	private _autoFind: boolean = false;
@@ -44,24 +27,34 @@ export class Tower extends Component {
 		this._autoShot = val;
 	}
 
+	private _baseProp: WeaponProp;
+	private _nowProp: WeaponProp;
+
+	public set baseProp(val: WeaponProp) {
+		this._baseProp = val;
+	}
+	public get baseProp() {
+		return this._baseProp;
+	}
+
+	public set prop(val: WeaponProp) {
+		this._nowProp = val;
+	}
+	public get prop() {
+		return this._nowProp;
+	}
+
 	start() {
 		input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
 		input.on(Input.EventType.TOUCH_MOVE, this.onTochMove, this);
 		input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
 		input.on(Input.EventType.TOUCH_CANCEL, this.onTouchEnd, this);
-		this.initProp();
+		this.baseProp = weaponConfig.gun;
+		this.refreshProp();
 		this._ui = this.node.getComponent(UITransform)!;
 		this._run = true;
 		this._autoShot = true;
-		this._autoFind = false;
-
-		globalThis.tower = this;
-	}
-
-	initProp() {
-		this.prop.interTime = 0.5;
-		this.prop.track = 2;
-		this.prop.wave = 2;
+		this._autoFind = true;
 	}
 
 	onTouchStart(event: EventTouch) {
@@ -86,7 +79,7 @@ export class Tower extends Component {
 			return angle;
 		} else if (this._autoShot) {
 			if (this._autoFind) {
-				if (!this._lastObjEnemy || !this._lastObjEnemy.isValid) {
+				if (!this._lastObjEnemy || !isValid(this._lastObjEnemy)) {
 					this._lastObjEnemy = this.getNearestEnemy();
 					if (!this._lastObjEnemy) return -1;
 				}
@@ -143,7 +136,7 @@ export class Tower extends Component {
 		let bullet = node.getComponent(Bullet)!;
 		bullet.angle = angle;
 		bullet.run = true;
-		bullet.prop = this.bulletProp;
+		bullet.owner = this;
 		return node;
 	}
 
@@ -158,5 +151,9 @@ export class Tower extends Component {
 				}
 			}
 		}
+	}
+
+	refreshProp() {
+		this.prop = this.prop = models.utils.tool.deepClone(this.baseProp);
 	}
 }

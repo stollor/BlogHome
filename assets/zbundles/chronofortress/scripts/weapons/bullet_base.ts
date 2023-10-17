@@ -1,23 +1,27 @@
 import { _decorator, Collider2D, Component, Node } from 'cc';
 import { BulletType } from '../define/game';
 import { PHY_GROUP } from '../define/physics';
-import { BulletProp } from './bullet_prop';
+import { WeaponProp } from '../define/prop';
+import { Tower } from './tower/tower';
+
 const { ccclass, property } = _decorator;
 
 @ccclass('BulletBase')
 export class BulletBase extends Component {
-	type: BulletType;
-	private _prop: BulletProp = { speed: 1000, lifeTime: 4, attack: 10 };
 	@property(Collider2D) collider: Collider2D = null;
 
-	public set prop(val: BulletProp) {
-		for (let i in val) {
-			this._prop[i] = val[i];
-		}
+	public type: BulletType;
+
+	private _owner: Tower;
+	public get owner(): Tower {
+		return this._owner;
 	}
-	public get prop() {
-		return this._prop;
+	public set owner(v: Tower) {
+		this._owner = v;
+		this.prop = models.utils.tool.deepClone(v.prop);
 	}
+
+	public prop: WeaponProp;
 
 	public ignoreEnemys: Node[] = [];
 

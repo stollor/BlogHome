@@ -1,10 +1,10 @@
 import { Collider2D, Color, Component, Contact2DType, Sprite, _decorator } from 'cc';
 import { DamageCount } from '../battle/damageCount';
 import { PHY_GROUP } from '../define/physics';
+import { EnemyProp } from '../define/prop';
 import { EffectController } from '../effect/effect_controller';
 import { Wall } from '../wall/wall';
 import { BulletBase } from '../weapons/bullet_base';
-import { EnemyProp } from './enemy_prop';
 const { ccclass, property } = _decorator;
 
 @ccclass('EnemyBase')
@@ -12,22 +12,27 @@ export class EnemyBase extends Component {
 	@property(Collider2D) collider: Collider2D = null;
 
 	private _baseProp: EnemyProp;
-	public get baseProp(): EnemyProp {
+	private _nowProp: EnemyProp;
+
+	public set baseProp(val: EnemyProp) {
+		this._baseProp = val;
+	}
+	public get baseProp() {
 		return this._baseProp;
 	}
-	public set baseProp(value: EnemyProp) {
-		this._baseProp = value;
+
+	public set prop(val: EnemyProp) {
+		this._nowProp = val;
 	}
-	private _nowProp: EnemyProp;
-	public get prop(): EnemyProp {
+	public get prop() {
 		return this._nowProp;
-	}
-	public set prop(value: EnemyProp) {
-		this._nowProp = value;
 	}
 
 	//状态控制
 	private _move: boolean = false;
+	public set move(val: boolean) {
+		this._move = val;
+	}
 	private _attack: boolean = false;
 
 	//专属变量
@@ -35,18 +40,10 @@ export class EnemyBase extends Component {
 	private _objAttack: Wall = null;
 	private _onHitColorCount: number = 0;
 
-	constructor() {
-		super();
-		this._baseProp = new EnemyProp();
-		this._nowProp = models.utils.tool.deepClone(this._baseProp);
-	}
-
-	onLoad() {
+	start() {
 		this.collider.group = PHY_GROUP.ENEMY;
 		this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
 		this.node.on('attack', this.onAttack, this);
-		this._move = true;
-		this._attack = false;
 	}
 
 	onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: any) {
@@ -96,6 +93,7 @@ export class EnemyBase extends Component {
 
 	onDead() {
 		this.unscheduleAllCallbacks();
+		models.em.emit('exp_add', this.prop.exp);
 		this.node.destroy();
 	}
 
@@ -108,5 +106,9 @@ export class EnemyBase extends Component {
 				this.node.getComponent(Sprite)!.color = new Color('#FFFFFF');
 			}
 		});
+	}
+
+	refreshProp() {
+		this.prop = models.utils.tool.deepClone(this.baseProp);
 	}
 }
