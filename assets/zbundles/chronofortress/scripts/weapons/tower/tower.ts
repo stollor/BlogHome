@@ -1,7 +1,7 @@
 import { _decorator, Component, EventTouch, Input, input, instantiate, isValid, Node, UITransform, Vec3 } from 'cc';
 import { weaponConfig } from '../../../config/weapon';
 import { dt } from '../../define/physics';
-import { WeaponProp } from '../../define/prop';
+import { Buff, BuffData, BuffEffect, BuffType, WeaponProp } from '../../define/prop';
 import { Bullet } from './bullet';
 const { ccclass, property } = _decorator;
 
@@ -27,6 +27,7 @@ export class Tower extends Component {
 		this._autoShot = val;
 	}
 
+	private _buffList: Buff[];
 	private _baseProp: WeaponProp;
 	private _nowProp: WeaponProp;
 
@@ -154,6 +155,33 @@ export class Tower extends Component {
 	}
 
 	refreshProp() {
-		this.prop = this.prop = models.utils.tool.deepClone(this.baseProp);
+		//获取基础数值备份
+		let baseProp = models.utils.tool.deepClone(this.baseProp);
+		this._nowProp = this._refreshProp(this._refreshProp(baseProp, BuffData.base), BuffData.all);
+	}
+
+	_refreshProp(baseProp: WeaponProp, dataType: BuffData) {
+		//处理基础数值的累加
+		let list1 = this._buffList.filter((item) => item.object == dataType && item.effect == BuffEffect.add);
+		list1.forEach((item: Buff) => {
+			baseProp[item.type] += item.val;
+		});
+		//处理基础数值的增幅
+		for (let key in BuffType) {
+			let list2 = this._buffList.filter(
+				(item) => item.object == dataType && item.effect == BuffEffect.ratio && item.type == key
+			);
+			let ratio = 1;
+			list2.forEach((item: Buff) => {
+				ratio += item.val;
+			});
+			baseProp[key] *= ratio;
+		}
+		//处理基础数值的独立乘区
+		let list3 = this._buffList.filter((item) => item.object == dataType && item.effect == BuffEffect.mul);
+		list3.forEach((item: Buff) => {
+			baseProp[item.type] *= 1 + item.val;
+		});
+		return baseProp;
 	}
 }
